@@ -20,11 +20,52 @@ namespace Surf.Controllers
         }
 
         // GET: Surfboards
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+    string sortOrder,
+    string currentFilter,
+    string searchString,
+    int? pageNumber)
         {
-              return _context.Surfboard != null ? 
-                          View(await _context.Surfboard.ToListAsync()) :
-                          Problem("Entity set 'SurfContext.Surfboard'  is null.");
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+
+            var surfboards = from s in _context.Surfboard
+                           select s;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                surfboards = surfboards.Where(s => s.Name.Contains(searchString)
+                                       || s.Type.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Name);
+                    break;
+                case "Date":
+                    surfboards = surfboards.OrderBy(s => s.Price);
+                    break;
+                case "date_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Type);
+                    break;
+                default:
+                    surfboards = surfboards.OrderBy(s => s.Equipment);
+                    break;
+            }
+
+            int pageSize = 5;
+            return View(await PaginatedList<Surfboard>.CreateAsync(surfboards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
         // GET: Surfboards/Details/5
@@ -150,14 +191,14 @@ namespace Surf.Controllers
             {
                 _context.Surfboard.Remove(surfboard);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool SurfboardExists(int id)
         {
-          return (_context.Surfboard?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.Surfboard?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }
