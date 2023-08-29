@@ -56,7 +56,7 @@ namespace Surf.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Length,Width,Thickness,Volume,Price,Type,Equipment")] Surfboard surfboard)
+        public async Task<IActionResult> Create([Bind("ID,Name,Length,Width,Thickness,Volume,Price,Type,Equipment,Image")] Surfboard surfboard)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace Surf.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Length,Width,Thickness,Volume,Price,Type,Equipment")] Surfboard surfboard)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Length,Width,Thickness,Volume,Price,Type,Equipment,Image")] Surfboard surfboard)
         {
             if (id != surfboard.ID)
             {
