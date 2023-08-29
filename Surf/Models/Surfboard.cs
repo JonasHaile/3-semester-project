@@ -26,5 +26,7 @@ namespace Surf.Models
         [Required(ErrorMessage = "*")]
         public string Equipment { get; set; }
 
+        public string Image { get; set; }
+
     }
 }
