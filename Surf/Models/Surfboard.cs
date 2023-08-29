@@ -14,5 +14,7 @@ namespace Surf.Models
         public string Type { get; set; }
         public string Equipment { get; set; }
 
+        public string Image { get; set; }
+
     }
 }
