@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Surf.Data;
-using Surf.Models;
 
 namespace Surf
 {

@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Surf.Models;
-using Surf.Data;
 using System;
 using System.Linq;
+using static System.Net.WebRequestMethods;
 
-namespace Surf.Models
+namespace Surf.Data
 {
     public static class SeedData
     {
@@ -16,7 +16,9 @@ namespace Surf.Models
                 // Look for any movies.
                 if (context.Surfboard.Any())
                 {
-                    return; // DB has been seeded
+                    context.Surfboard.RemoveRange(context.Surfboard); // Remove all records from the table
+                    context.SaveChanges();
+                    // return;
                 }
 
                 context.Surfboard.AddRange(
@@ -31,7 +33,7 @@ namespace Surf.Models
                         Price = 565,
                         Type = "Shortboard",
                         Equipment = "hej med digwdlwjdlwdjlwdjlwkdjlwkdjlwkdjlwkdjlwkdjlwkjdlwkjdlwkdjlkwjdlkwjdlwkdjldwwwwwwwwwwwwwwwww                                                        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww                                         wwwwwwwwww ",
-                        Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                        Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p347_i15_w5000.jpeg?width=160"
                     },
 
                 new Surfboard
@@ -44,7 +46,7 @@ namespace Surf.Models
                     Price = 685,
                     Type = "Funboard",
                     Equipment = " ",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p335_i10_w5000.jpeg?width=640"
                 },
 
                 new Surfboard
@@ -57,7 +59,7 @@ namespace Surf.Models
                     Price = 695,
                     Type = "Funboard",
                     Equipment = " ",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p329_i37_w1168.png?width=640"
                 },
 
                 new Surfboard
@@ -70,7 +72,7 @@ namespace Surf.Models
                     Price = 645,
                     Type = "Fish",
                     Equipment = " ",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p340_i29_w5000.jpeg?width=160"
                 },
 
                 new Surfboard
@@ -83,7 +85,7 @@ namespace Surf.Models
                     Price = 895,
                     Type = "Longboard",
                     Equipment = " ",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p336_i55_w5000.jpeg?width=160"
                 },
 
                 new Surfboard
@@ -96,7 +98,7 @@ namespace Surf.Models
                     Price = 645,
                     Type = "Shortboard",
                     Equipment = " ",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p5_i4_w160.jpeg"
                 },
 
                 new Surfboard
@@ -109,7 +111,7 @@ namespace Surf.Models
                     Price = 1025,
                     Type = "Longboard",
                     Equipment = " ",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p285_i27_w333.jpeg?width=160"
                 },
 
                 new Surfboard
@@ -122,7 +124,7 @@ namespace Surf.Models
                     Price = 854,
                     Type = "SUP",
                     Equipment = "Paddle",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://kite-prod.b-cdn.net/13845/naish-one-alana-12-6-s26-inflatable-sup.jpg"
                 },
 
                 new Surfboard
@@ -135,7 +137,7 @@ namespace Surf.Models
                     Price = 611,
                     Type = "SUP",
                     Equipment = "Fin, Paddle, Pump, Leash",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://kite-prod.b-cdn.net/16394-thickbox_default/stx-tourer-11-6-2022-2023-inflatable-sup-package.jpg"
                 },
 
                 new Surfboard
@@ -148,9 +150,9 @@ namespace Surf.Models
                     Price = 1304,
                     Type = "SUP",
                     Equipment = "Fin, Paddle, Pump, Leash",
-                    Image = "https://ttf.dk/media/1326/DGF_01.jpg"
+                    Image = "https://www.oneopensky.dk/img/1024/1024/resize/S/2/S26SB-L140C28_103943.jpg"
                 });
-                    
+
                 context.SaveChanges();
 
             }
