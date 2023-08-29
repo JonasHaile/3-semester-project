@@ -23,9 +23,9 @@ namespace Surf.Models
         public decimal Price { get; set; }
         [Required(ErrorMessage = "*")]
         public string Type { get; set; }
-        [Required(ErrorMessage = "*")]
+        
         public string? Equipment { get; set; }
-
+        [Required(ErrorMessage = "*")]
         public string Image { get; set; }
 
     }
