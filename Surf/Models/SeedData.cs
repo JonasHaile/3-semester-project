@@ -16,7 +16,8 @@ namespace Surf.Models
                 // Look for any movies.
                 if (context.Surfboard.Any())
                 {
-                    return; // DB has been seeded
+                    context.Surfboard.RemoveRange(context.Surfboard); // Remove all records from the table
+                    context.SaveChanges();
                 }
 
                 context.Surfboard.AddRange(
