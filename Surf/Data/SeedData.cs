@@ -16,9 +16,9 @@ namespace Surf.Data
                 // Look for any movies.
                 if (context.Surfboard.Any())
                 {
-                    context.Surfboard.RemoveRange(context.Surfboard); // Remove all records from the table
-                    context.SaveChanges();
-                    // return;
+                    //context.Surfboard.RemoveRange(context.Surfboard); // Remove all records from the table
+                    //context.SaveChanges();
+                    return;
                 }
 
                 context.Surfboard.AddRange(
@@ -32,7 +32,7 @@ namespace Surf.Data
                         Volume = 38.8,
                         Price = 565,
                         Type = "Shortboard",
-                        Equipment = "hej med digwdlwjdlwdjlwdjlwkdjlwkdjlwkdjlwkdjlwkdjlwkjdlwkjdlwkdjlkwjdlkwjdlwkdjldwwwwwwwwwwwwwwwww                                                        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww                                         wwwwwwwwww ",
+                        Equipment = " ",
                         Image = "https://www.light-surfboards.com/uploads/5/7/3/0/57306051/s326152794241300969_p347_i15_w5000.jpeg?width=160"
                     },
 
@@ -154,7 +154,6 @@ namespace Surf.Data
                 });
 
                 context.SaveChanges();
-
             }
         }
     }
