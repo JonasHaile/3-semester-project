@@ -30,7 +30,7 @@ namespace Surf.Models
                         Volume = 38.8,
                         Price = 565,
                         Type = "Shortboard",
-                        Equipment = " ",
+                        Equipment = "hej med digwdlwjdlwdjlwdjlwkdjlwkdjlwkdjlwkdjlwkdjlwkjdlwkjdlwkdjlkwjdlkwjdlwkdjldwwwwwwwwwwwwwwwww                                                        wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww                                         wwwwwwwwww ",
                         Image = "https://ttf.dk/media/1326/DGF_01.jpg"
                     },
 
