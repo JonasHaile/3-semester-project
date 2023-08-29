@@ -20,11 +20,91 @@ namespace Surf.Controllers
         }
 
         // GET: Surfboards
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string surfboardEquipment)
         {
-              return _context.Surfboard != null ? 
-                          View(await _context.Surfboard.ToListAsync()) :
-                          Problem("Entity set 'SurfContext.Surfboard'  is null.");
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
+            ViewData["LengthSortParm"] = sortOrder == "Length" ? "Length_desc" : "Length";
+            ViewData["WidthSortParm"] = sortOrder == "Width" ? "Width_desc" : "Width";
+            ViewData["ThicknessSortParm"] = sortOrder == "Thickness" ? "Thickness_desc" : "Thickness";
+            ViewData["VolumeSortParm"] = sortOrder == "Volume" ? "Volume_desc" : "Volume";
+            ViewData["TypeSortParm"] = sortOrder == "Type" ? "Type_desc" : "Type";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
+            ViewData["EquipmentSortParm"] = sortOrder == "Equipment" ? "Equipment_desc" : "Equipment";
+
+            IQueryable<string> equipmentQuery = from s in _context.Surfboard orderby s.Equipment select s.Equipment;
+
+            var surfboards = from s in _context.Surfboard select s;
+
+            switch (sortOrder)
+            {
+                case "Length":
+                    surfboards = surfboards.OrderBy(s => s.Length);
+                    break;
+                case "Length_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Length);
+                    break;
+                case "Width":
+                    surfboards = surfboards.OrderBy(s => s.Width);
+                    break;
+                case "Width_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Width);
+                    break;
+                case "Thickness":
+                    surfboards = surfboards.OrderBy(s => s.Thickness);
+                    break;
+                case "Thickness_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Thickness);
+                    break;
+                case "Volume":
+                    surfboards = surfboards.OrderBy(s => s.Volume);
+                    break;
+                case "Volume_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Volume);
+                    break;
+                case "Type":
+                    surfboards = surfboards.OrderBy(s => s.Length);
+                    break;
+                case "Type_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Length);
+                    break;
+                case "Price":
+                    surfboards = surfboards.OrderBy(s => s.Price);
+                    break;
+                case "Price_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Price);
+                    break;
+                case "Equipment":
+                    surfboards = surfboards.OrderBy(s => s.Equipment);
+                    break;
+                case "Equipment_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Equipment);
+                    break;
+                case "Name_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Name);
+                    break;
+                default:
+                    surfboards = surfboards.OrderBy(s => s.Name);
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                surfboards = surfboards.Where(s => s.Name!.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(surfboardEquipment))
+            {
+                surfboards = surfboards.Where(x => x.Equipment == surfboardEquipment);
+            }
+
+            var equipmentSearch = new EquipmentSearch
+            {
+                Equipment = new SelectList(await equipmentQuery.Distinct().ToListAsync()),
+                Surfboards = await surfboards.ToListAsync()
+
+            };
+
+            return View(equipmentSearch);
         }
 
         // GET: Surfboards/Details/5

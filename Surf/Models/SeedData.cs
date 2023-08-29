@@ -30,7 +30,7 @@ namespace Surf.Models
                         Volume = 38.8,
                         Price = 565,
                         Type = "Shortboard",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
@@ -42,7 +42,7 @@ namespace Surf.Models
                         Volume = 44.16,
                         Price = 685,
                         Type = "Funboard",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
@@ -54,7 +54,7 @@ namespace Surf.Models
                         Volume = 43.22,
                         Price = 695,
                         Type = "Funboard",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
@@ -66,7 +66,7 @@ namespace Surf.Models
                         Volume = 29.39,
                         Price = 645,
                         Type = "Fish",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
@@ -78,7 +78,7 @@ namespace Surf.Models
                         Volume = 65.4,
                         Price = 895,
                         Type = "Longboard",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
@@ -90,7 +90,7 @@ namespace Surf.Models
                         Volume = 33.7,
                         Price = 645,
                         Type = "Shortboard",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
@@ -102,7 +102,7 @@ namespace Surf.Models
                         Volume = 80,
                         Price = 1025,
                         Type = "Longboard",
-                        Equipment = " "
+                        Equipment = ""
                     },
 
                     new Surfboard
