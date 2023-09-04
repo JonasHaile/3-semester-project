@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Surf.Data;
 using Surf.Models;
 
@@ -20,9 +21,15 @@ namespace Surf.Controllers
         }
 
         // GET: Surfboards
-        public async Task<IActionResult> Index(string searchString, string sortOrder, string surfboardEquipment)
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string surfboardEquipment, decimal? price)
         {
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Name_desc" : "";
+
+            // Retrieve all surfboards from _context local database
+            // And storing in the 'surfboards' variable
+            var surfboards = from s in _context.Surfboard select s;
+
+            // Sort
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "Name_desc" : "Name";
             ViewData["LengthSortParm"] = sortOrder == "Length" ? "Length_desc" : "Length";
             ViewData["WidthSortParm"] = sortOrder == "Width" ? "Width_desc" : "Width";
             ViewData["ThicknessSortParm"] = sortOrder == "Thickness" ? "Thickness_desc" : "Thickness";
@@ -31,12 +38,15 @@ namespace Surf.Controllers
             ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
             ViewData["EquipmentSortParm"] = sortOrder == "Equipment" ? "Equipment_desc" : "Equipment";
 
-            IQueryable<string> equipmentQuery = from s in _context.Surfboard orderby s.Equipment select s.Equipment;
-
-            var surfboards = from s in _context.Surfboard select s;
-
+            // Sort
             switch (sortOrder)
             {
+                case "Name":
+                    surfboards = surfboards.OrderBy(s => s.Name);
+                    break;
+                case "Name_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Name);
+                    break;
                 case "Length":
                     surfboards = surfboards.OrderBy(s => s.Length);
                     break;
@@ -62,10 +72,10 @@ namespace Surf.Controllers
                     surfboards = surfboards.OrderByDescending(s => s.Volume);
                     break;
                 case "Type":
-                    surfboards = surfboards.OrderBy(s => s.Length);
+                    surfboards = surfboards.OrderBy(s => s.Type);
                     break;
                 case "Type_desc":
-                    surfboards = surfboards.OrderByDescending(s => s.Length);
+                    surfboards = surfboards.OrderByDescending(s => s.Type);
                     break;
                 case "Price":
                     surfboards = surfboards.OrderBy(s => s.Price);
@@ -79,32 +89,15 @@ namespace Surf.Controllers
                 case "Equipment_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Equipment);
                     break;
-                case "Name_desc":
-                    surfboards = surfboards.OrderByDescending(s => s.Name);
-                    break;
-                default:
-                    surfboards = surfboards.OrderBy(s => s.Name);
-                    break;
             }
 
+            // Search
             if (!string.IsNullOrEmpty(searchString))
             {
                 surfboards = surfboards.Where(s => s.Name!.Contains(searchString));
             }
 
-            if (!string.IsNullOrEmpty(surfboardEquipment))
-            {
-                surfboards = surfboards.Where(x => x.Equipment == surfboardEquipment);
-            }
-
-            var equipmentSearch = new EquipmentSearch
-            {
-                Equipment = new SelectList(await equipmentQuery.Distinct().ToListAsync()),
-                Surfboards = await surfboards.ToListAsync()
-
-            };
-
-            return View(equipmentSearch);
+            return View(await surfboards.ToListAsync());
         }
 
         // GET: Surfboards/Details/5

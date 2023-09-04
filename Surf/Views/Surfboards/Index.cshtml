@@ -1,4 +1,4 @@
-﻿@model Surf.Models.EquipmentSearch
+﻿@model IEnumerable<Surf.Models.Surfboard>
 
 @{
     ViewData["Title"] = "Surfboards";
@@ -6,54 +6,50 @@
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 
 <form asp-controller="Surfboards" asp-action="Index" method="get">
     <p>
-        <select asp-for="SurfboardEquipment" asp-items="Model.Equipment">
-            <option value="">
-                All
-            </option>
-        </select>
-        <input type="text" name="searchString" />
+        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
         <input type="submit" value="Search" />
     </p>
 </form>
-
+<a asp-action="Index">Back to Full List</a>
+<hr />
+<p>
+    <a asp-action="Create">Create New Surfboard</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Name)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["LengthSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Length)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["LengthSortParm"]">@Html.DisplayNameFor(model => model.Length)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["WidthSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Width)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["WidthSortParm"]">@Html.DisplayNameFor(model => model.Width)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ThicknessSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Thickness)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ThicknessSortParm"]">@Html.DisplayNameFor(model => model.Thickness)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["VolumeSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Volume)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["VolumeSortParm"]">@Html.DisplayNameFor(model => model.Volume)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Type)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]">@Html.DisplayNameFor(model => model.Type)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Price)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]">@Html.DisplayNameFor(model => model.Surfboards[0].Equipment)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]">@Html.DisplayNameFor(model => model.Equipment)</a>
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Surfboards) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
