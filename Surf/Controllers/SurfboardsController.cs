@@ -183,61 +183,110 @@ namespace Surf.Controllers
                 return View(surfboard);
             }
 
-            // POST: Surfboards/Edit/5
-            // To protect from overposting attacks, enable the specific properties you want to bind to.
-            // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-            [HttpPost]
-            [ValidateAntiForgeryToken]
-            public async Task<IActionResult> Edit(int id, [Bind("ID,Name,Length,Width,Thickness,Volume,Price,Type,Equipment,Image")] Surfboard surfboard)
+        // POST: Surfboards/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int? id, byte[] rowVersion)
+        {
+            if (id == null)
             {
-                if (id != surfboard.ID)
-                {
-                    return NotFound();
-                }
+                return NotFound();
+            }
 
-                if (ModelState.IsValid)
+            var department = await _context.Surfboard
+            
+            .AsNoTracking()
+            .FirstOrDefaultAsync(m => m.ID == id);
+
+            var surfboardToUpdate = await _context.Surfboard.FirstOrDefaultAsync(m => m.ID == id);
+
+            if (surfboardToUpdate == null)
+            {
+                Surfboard deletedSurfboard = new Surfboard();
+                await TryUpdateModelAsync(deletedSurfboard);
+                ModelState.AddModelError(string.Empty,
+                    "Unable to save changes. The Surfboard was deleted by another user.");
+                ViewData["SurfboardID"] = new SelectList(_context.Surfboard, "ID", "Name", deletedSurfboard.ID);
+                return View(deletedSurfboard);
+            }
+
+            _context.Entry(surfboardToUpdate).Property("RowVersion").OriginalValue = rowVersion;
+
+            if (await TryUpdateModelAsync<Surfboard>(
+                surfboardToUpdate,
+                "",
+                s => s.Name, s => s.Length, s => s.Width, s => s.Thickness, s => s.Volume, s => s.Price, s => s.Type, s => s.ID))
+            {
+                try
                 {
-                    try
-                    {
-                        _context.Update(surfboard);
-                        await _context.SaveChangesAsync();
-                    }
-                    catch (DbUpdateConcurrencyException)
-                    {
-                        if (!SurfboardExists(surfboard.ID))
-                        {
-                            return NotFound();
-                        }
-                        else
-                        {
-                            throw;
-                        }
-                    }
+                    await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                return View(surfboard);
-            }
-
-            // GET: Surfboards/Delete/5
-            public async Task<IActionResult> Delete(int? id)
-            {
-                if (id == null || _context.Surfboard == null)
+                catch (DbUpdateConcurrencyException ex)
                 {
-                    return NotFound();
-                }
+                    var exceptionEntry = ex.Entries.Single();
+                    var clientValues = (Surfboard)exceptionEntry.Entity;
+                    var databaseEntry = exceptionEntry.GetDatabaseValues();
+                    if (databaseEntry == null)
+                    {
+                        ModelState.AddModelError(string.Empty,
+                            "Unable to save changes. The Surfboard was deleted by another user.");
+                    }
+                    else
+                    {
+                        var databaseValues = (Surfboard)databaseEntry.ToObject();
 
-                var surfboard = await _context.Surfboard
-                    .FirstOrDefaultAsync(m => m.ID == id);
-                if (surfboard == null)
-                {
-                    return NotFound();
-                }
+                        if (databaseValues.Name != clientValues.Name)
+                        {
+                            ModelState.AddModelError("Name", $"Current value: {databaseValues.Name}");
+                        }
+                        if (databaseValues.Length != clientValues.Length)
+                        {
+                            ModelState.AddModelError("Length", $"Current value: {databaseValues.Length:c}");
+                        }
+                        if (databaseValues.Width != clientValues.Width)
+                        {
+                            ModelState.AddModelError("Width", $"Current value: {databaseValues.Width:d}");
+                        }
+                        if (databaseValues.Thickness != clientValues.Thickness)
+                        {
+                            ModelState.AddModelError("Thickness", $"Current value: {databaseValues?.Thickness}");
+                        }
+                        if (databaseValues.Volume != clientValues.Volume)
+                        {
+                            ModelState.AddModelError("Volume", $"Current value: {databaseValues?.Volume}");
+                        }
+                        if (databaseValues.Price != clientValues.Price)
+                        {
+                            ModelState.AddModelError("Price", $"Current value: {databaseValues?.Price}");
+                        }
+                        if (databaseValues.Type != clientValues.Type)
+                        {
+                            ModelState.AddModelError("Type", $"Current value: {databaseValues?.Type}");
+                        }
+                        if (databaseValues.ID != clientValues.ID)
+                        {
+                            ModelState.AddModelError("ID", $"Current value: {databaseValues?.ID}");
+                        }
 
-                return View(surfboard);
+                        ModelState.AddModelError(string.Empty, "The record you attempted to edit "
+                                + "was modified by another user after you got the original value. The "
+                                + "edit operation was canceled and the current values in the database "
+                                + "have been displayed. If you still want to edit this record, click "
+                                + "the Save button again. Otherwise click the Back to List hyperlink.");
+                        surfboardToUpdate.RowVersion = (byte[])databaseValues.RowVersion;
+                        ModelState.Remove("RowVersion");
+                    }
+                }
             }
+            ViewData["ID"] = new SelectList(_context.Surfboard, "ID", "Name", surfboardToUpdate.ID);
+            return View(surfboardToUpdate);
+        }
 
-            // POST: Surfboards/Delete/5
-            [HttpPost, ActionName("Delete")]
+        // POST: Surfboards/Delete/5
+        [HttpPost, ActionName("Delete")]
             [ValidateAntiForgeryToken]
             public async Task<IActionResult> DeleteConfirmed(int id)
             {

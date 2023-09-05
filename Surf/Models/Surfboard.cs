@@ -28,5 +28,8 @@ namespace Surf.Models
         [Required(ErrorMessage = "*")]
         public string Image { get; set; }
 
+        [Timestamp]
+        public byte[] RowVersion { get; set; }
+
     }
 }
