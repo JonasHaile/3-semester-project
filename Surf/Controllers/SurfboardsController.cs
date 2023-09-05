@@ -25,24 +25,25 @@ namespace Surf.Controllers
     string sortOrder,
     string currentFilter,
     string searchString,
-    int? pageNumber,
-    string surfboardEquipment, 
-    decimal? price)
+    int? pageNumber)
+    //string surfboardEquipment, 
+    //decimal? price)
         {
             
             
 
             // Sort
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
+            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            ViewData["LengthSortParm"] = sortOrder == "Length" ? "Length_desc" : "Length";
-            ViewData["WidthSortParm"] = sortOrder == "Width" ? "Width_desc" : "Width";
-            ViewData["ThicknessSortParm"] = sortOrder == "Thickness" ? "Thickness_desc" : "Thickness";
-            ViewData["VolumeSortParm"] = sortOrder == "Volume" ? "Volume_desc" : "Volume";
-            ViewData["TypeSortParm"] = sortOrder == "Type" ? "Type_desc" : "Type";
-            ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
-            ViewData["EquipmentSortParm"] = sortOrder == "Equipment" ? "Equipment_desc" : "Equipment";
+            ViewData["LengthSortParm"] = sortOrder == "Length" ? "length_desc" : "Length";
+            ViewData["WidthSortParm"] = sortOrder == "Width" ? "width_desc" : "Width";
+            ViewData["ThicknessSortParm"] = sortOrder == "Thickness" ? "thickness_desc" : "Thickness";
+            ViewData["VolumeSortParm"] = sortOrder == "Volume" ? "volume_desc" : "Volume";
+            ViewData["TypeSortParm"] = sortOrder == "Type" ? "type_desc" : "Type";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "price_desc" : "Price";
+            ViewData["EquipmentSortParm"] = sortOrder == "Equipment" ? "equipment_desc" : "Equipment";
 
             if (searchString != null)
             {
@@ -62,54 +63,60 @@ namespace Surf.Controllers
             if (!String.IsNullOrEmpty(searchString))
             {
                 surfboards = surfboards.Where(s => s.Name.Contains(searchString)
-                                       || s.Type.Contains(searchString));
+                                       || s.Type.Contains(searchString)
+                                       || s.Equipment.Contains(searchString)
+                                       || s.Length.ToString().Contains(searchString)
+                                       || s.Width.ToString().Contains(searchString)
+                                       || s.Thickness.ToString().Contains(searchString)
+                                       || s.Volume.ToString().Contains(searchString)
+                                       || s.Price.ToString().Contains(searchString));
             }
             //sort
                     switch (sortOrder)
             {
-                case "name":
+                case "Name":
                     surfboards = surfboards.OrderBy(s => s.Name);
                     break;
                 case "name_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Name);
                     break;
-                case "length":
+                case "Length":
                     surfboards = surfboards.OrderBy(s => s.Length);
                     break;
                 case "length_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Length);
                     break;
-                case "width":
+                case "Width":
                     surfboards = surfboards.OrderBy(s => s.Width);
                     break;
                 case "width_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Width);
                     break;
-                case "thickness":
+                case "Thickness":
                     surfboards = surfboards.OrderBy(s => s.Thickness);
                     break;
                 case "thickness_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Thickness);
                     break;
-                case "volume":
+                case "Volume":
                     surfboards = surfboards.OrderBy(s => s.Volume);
                     break;
                 case "volume_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Volume);
                     break;
-                case "type":
+                case "Type":
                     surfboards = surfboards.OrderBy(s => s.Type);
                     break;
                 case "type_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Type);
                     break;
-                case "price":
+                case "Price":
                     surfboards = surfboards.OrderBy(s => s.Price);
                     break;
                 case "price_desc":
                     surfboards = surfboards.OrderByDescending(s => s.Price);
                     break;
-                case "equipment":
+                case "Equipment":
                     surfboards = surfboards.OrderBy(s => s.Equipment);
                     break;
                 case "equipment_desc":
@@ -121,85 +128,7 @@ namespace Surf.Controllers
             return View(await PaginatedList<Surfboard>.CreateAsync(surfboards.AsNoTracking(), pageNumber ?? 1, pageSize));
         }
 
-        //public async Task<IActionResult> Index(string searchString, string sortOrder, string surfboardEquipment, decimal? price)
-        //{
-
-        //    // Retrieve all surfboards from _context local database
-        //    // And storing in the 'surfboards' variable
-        //    var surfboards = from s in _context.Surfboard select s;
-
-        //    // Sort
-        //    ViewData["NameSortParm"] = sortOrder == "Name" ? "Name_desc" : "Name";
-        //    ViewData["LengthSortParm"] = sortOrder == "Length" ? "Length_desc" : "Length";
-        //    ViewData["WidthSortParm"] = sortOrder == "Width" ? "Width_desc" : "Width";
-        //    ViewData["ThicknessSortParm"] = sortOrder == "Thickness" ? "Thickness_desc" : "Thickness";
-        //    ViewData["VolumeSortParm"] = sortOrder == "Volume" ? "Volume_desc" : "Volume";
-        //    ViewData["TypeSortParm"] = sortOrder == "Type" ? "Type_desc" : "Type";
-        //    ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
-        //    ViewData["EquipmentSortParm"] = sortOrder == "Equipment" ? "Equipment_desc" : "Equipment";
-
-        //    // Sort
-        //    switch (sortOrder)
-        //    {
-        //        case "Name":
-        //            surfboards = surfboards.OrderBy(s => s.Name);
-        //            break;
-        //        case "Name_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Name);
-        //            break;
-        //        case "Length":
-        //            surfboards = surfboards.OrderBy(s => s.Length);
-        //            break;
-        //        case "Length_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Length);
-        //            break;
-        //        case "Width":
-        //            surfboards = surfboards.OrderBy(s => s.Width);
-        //            break;
-        //        case "Width_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Width);
-        //            break;
-        //        case "Thickness":
-        //            surfboards = surfboards.OrderBy(s => s.Thickness);
-        //            break;
-        //        case "Thickness_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Thickness);
-        //            break;
-        //        case "Volume":
-        //            surfboards = surfboards.OrderBy(s => s.Volume);
-        //            break;
-        //        case "Volume_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Volume);
-        //            break;
-        //        case "Type":
-        //            surfboards = surfboards.OrderBy(s => s.Type);
-        //            break;
-        //        case "Type_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Type);
-        //            break;
-        //        case "Price":
-        //            surfboards = surfboards.OrderBy(s => s.Price);
-        //            break;
-        //        case "Price_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Price);
-        //            break;
-        //        case "Equipment":
-        //            surfboards = surfboards.OrderBy(s => s.Equipment);
-        //            break;
-        //        case "Equipment_desc":
-        //            surfboards = surfboards.OrderByDescending(s => s.Equipment);
-        //            break;
-        //    }
-
-        //    // Search
-        //    if (!string.IsNullOrEmpty(searchString))
-        //    {
-        //        surfboards = surfboards.Where(s => s.Name!.Contains(searchString));
-        //    }
-
-        //    return View(await surfboards.ToListAsync());
-
-        //}
+        
 
         // GET: Surfboards/Details/5
         public async Task<IActionResult> Details(int? id)
