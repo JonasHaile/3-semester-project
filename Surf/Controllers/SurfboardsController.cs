@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Surf.Data;
 using Surf.Models;
 
@@ -20,6 +21,7 @@ namespace Surf.Controllers
         }
 
         // GET: Surfboards
+<<<<<<< HEAD
         public async Task<IActionResult> Index(
     string sortOrder,
     string currentFilter,
@@ -66,6 +68,85 @@ namespace Surf.Controllers
 
             int pageSize = 5;
             return View(await PaginatedList<Surfboard>.CreateAsync(surfboards.AsNoTracking(), pageNumber ?? 1, pageSize));
+=======
+        public async Task<IActionResult> Index(string searchString, string sortOrder, string surfboardEquipment, decimal? price)
+        {
+
+            // Retrieve all surfboards from _context local database
+            // And storing in the 'surfboards' variable
+            var surfboards = from s in _context.Surfboard select s;
+
+            // Sort
+            ViewData["NameSortParm"] = sortOrder == "Name" ? "Name_desc" : "Name";
+            ViewData["LengthSortParm"] = sortOrder == "Length" ? "Length_desc" : "Length";
+            ViewData["WidthSortParm"] = sortOrder == "Width" ? "Width_desc" : "Width";
+            ViewData["ThicknessSortParm"] = sortOrder == "Thickness" ? "Thickness_desc" : "Thickness";
+            ViewData["VolumeSortParm"] = sortOrder == "Volume" ? "Volume_desc" : "Volume";
+            ViewData["TypeSortParm"] = sortOrder == "Type" ? "Type_desc" : "Type";
+            ViewData["PriceSortParm"] = sortOrder == "Price" ? "Price_desc" : "Price";
+            ViewData["EquipmentSortParm"] = sortOrder == "Equipment" ? "Equipment_desc" : "Equipment";
+
+            // Sort
+            switch (sortOrder)
+            {
+                case "Name":
+                    surfboards = surfboards.OrderBy(s => s.Name);
+                    break;
+                case "Name_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Name);
+                    break;
+                case "Length":
+                    surfboards = surfboards.OrderBy(s => s.Length);
+                    break;
+                case "Length_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Length);
+                    break;
+                case "Width":
+                    surfboards = surfboards.OrderBy(s => s.Width);
+                    break;
+                case "Width_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Width);
+                    break;
+                case "Thickness":
+                    surfboards = surfboards.OrderBy(s => s.Thickness);
+                    break;
+                case "Thickness_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Thickness);
+                    break;
+                case "Volume":
+                    surfboards = surfboards.OrderBy(s => s.Volume);
+                    break;
+                case "Volume_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Volume);
+                    break;
+                case "Type":
+                    surfboards = surfboards.OrderBy(s => s.Type);
+                    break;
+                case "Type_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Type);
+                    break;
+                case "Price":
+                    surfboards = surfboards.OrderBy(s => s.Price);
+                    break;
+                case "Price_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Price);
+                    break;
+                case "Equipment":
+                    surfboards = surfboards.OrderBy(s => s.Equipment);
+                    break;
+                case "Equipment_desc":
+                    surfboards = surfboards.OrderByDescending(s => s.Equipment);
+                    break;
+            }
+
+            // Search
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                surfboards = surfboards.Where(s => s.Name!.Contains(searchString));
+            }
+
+            return View(await surfboards.ToListAsync());
+>>>>>>> SearchBranch
         }
 
         // GET: Surfboards/Details/5

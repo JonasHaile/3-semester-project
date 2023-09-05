@@ -6,8 +6,17 @@
 
 <h1>Index</h1>
 
+
+<form asp-controller="Surfboards" asp-action="Index" method="get">
+    <p>
+        <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+<a asp-action="Index">Back to Full List</a>
+<hr />
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Surfboard</a>
 </p>
 
 <form asp-action="Index" method="get">
@@ -27,6 +36,7 @@
                 @Html.DisplayNameFor(model => model.Image)
             </th> *@
             <th>
+<<<<<<< HEAD
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
             </th>
             <th>
@@ -37,6 +47,30 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Equipment</a>
+=======
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["LengthSortParm"]">@Html.DisplayNameFor(model => model.Length)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["WidthSortParm"]">@Html.DisplayNameFor(model => model.Width)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ThicknessSortParm"]">@Html.DisplayNameFor(model => model.Thickness)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["VolumeSortParm"]">@Html.DisplayNameFor(model => model.Volume)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]">@Html.DisplayNameFor(model => model.Type)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]">@Html.DisplayNameFor(model => model.Equipment)</a>
+>>>>>>> SearchBranch
             </th>
             <th></th>
         </tr>
@@ -53,10 +87,22 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Price)
+                @Html.DisplayFor(modelItem => item.Length)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Width)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Thickness)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Volume)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Equipment)
