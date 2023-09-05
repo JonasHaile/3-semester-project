@@ -148,7 +148,7 @@ namespace Surf.Controllers
         //        return View(await surfboards.ToListAsync());
 
         //    }
-
+            
             // GET: Surfboards/Details/5
             public async Task<IActionResult> Details(int? id)
             {
