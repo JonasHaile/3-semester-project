@@ -48,31 +48,19 @@
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Equipment</a>
             </th>
-            @*<th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["LengthSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Length</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["LengthSortParm"]">@Html.DisplayNameFor(model => model.Length)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["WidthSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Width</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["WidthSortParm"]">@Html.DisplayNameFor(model => model.Width)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ThicknessSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Thickness</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ThicknessSortParm"]">@Html.DisplayNameFor(model => model.Thickness)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["VolumeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Volume</a>
             </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["VolumeSortParm"]">@Html.DisplayNameFor(model => model.Volume)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["TypeSortParm"]">@Html.DisplayNameFor(model => model.Type)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["PriceSortParm"]">@Html.DisplayNameFor(model => model.Price)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]">@Html.DisplayNameFor(model => model.Equipment)</a>
-
-            </th>*@
+         
             <th></th>
         </tr>
     </thead>
