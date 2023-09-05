@@ -14,6 +14,6 @@ namespace Surf.Data
         {
         }
 
-        public DbSet<Surf.Models.Surfboard> Surfboard { get; set; } = default!;
+        public DbSet<Surfboard> Surfboard { get; set; } = default!;
     }
 }

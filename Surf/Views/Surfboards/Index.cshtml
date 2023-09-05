@@ -36,7 +36,7 @@
                 @Html.DisplayNameFor(model => model.Image)
             </th> *@
             <th>
-<<<<<<< HEAD
+
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Name</a>
             </th>
             <th>
@@ -47,7 +47,8 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Equipment</a>
-=======
+            </th>
+            @*<th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
             </th>
             <th>
@@ -70,8 +71,8 @@
             </th>
             <th>
                 <a asp-action="Index" asp-route-sortOrder="@ViewData["EquipmentSortParm"]">@Html.DisplayNameFor(model => model.Equipment)</a>
->>>>>>> SearchBranch
-            </th>
+
+            </th>*@
             <th></th>
         </tr>
     </thead>
