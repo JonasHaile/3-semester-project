@@ -68,6 +68,7 @@ namespace Surf.Controllers
                                        || s.Volume.ToString().Contains(searchString)
                                        || s.Price.ToString().Contains(searchString));
             }
+            
             //sort
                     switch (sortOrder)
             {
