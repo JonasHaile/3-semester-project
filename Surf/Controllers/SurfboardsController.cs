@@ -26,8 +26,6 @@ namespace Surf.Controllers
     string currentFilter,
     string searchString,
     int? pageNumber)
-    //string surfboardEquipment, 
-    //decimal? price)
         {
             
             
@@ -35,7 +33,6 @@ namespace Surf.Controllers
             // Sort
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = sortOrder == "Name" ? "name_desc" : "Name";
-            //ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
             ViewData["LengthSortParm"] = sortOrder == "Length" ? "length_desc" : "Length";
             ViewData["WidthSortParm"] = sortOrder == "Width" ? "width_desc" : "Width";
