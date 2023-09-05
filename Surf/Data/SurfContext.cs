@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Surf.Models;
 
 namespace Surf.Data
 {
-    public class SurfContext : DbContext
+    public class SurfContext : IdentityDbContext
     {
         public SurfContext (DbContextOptions<SurfContext> options)
             : base(options)
