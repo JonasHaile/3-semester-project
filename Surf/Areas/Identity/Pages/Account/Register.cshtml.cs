@@ -70,6 +70,22 @@ namespace Surf.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required]
+            [Display(Name = "Full name")]
+            [DataType(DataType.Text)]
+            public string FullName { get; set; }
+
+            [Required]
+            [Display(Name = "Phone number")]
+            [DataType(DataType.Text)]
+            public int PhoneNumber { get; set; }
+
+            [Required]
+            [Display(Name = "Address")]
+            [DataType(DataType.Text)]
+            public string Address { get; set; }
+
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -113,6 +129,10 @@ namespace Surf.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+
+                user.FullName = Input.FullName;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.Address = Input.Address;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);

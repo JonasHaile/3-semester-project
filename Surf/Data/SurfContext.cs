@@ -8,7 +8,7 @@ using Surf.Models;
 
 namespace Surf.Data
 {
-    public class SurfContext : IdentityDbContext
+    public class SurfContext : IdentityDbContext<User>
     {
         public SurfContext (DbContextOptions<SurfContext> options)
             : base(options)
@@ -16,5 +16,6 @@ namespace Surf.Data
         }
 
         public DbSet<Surfboard> Surfboard { get; set; } = default!;
+
     }
 }
