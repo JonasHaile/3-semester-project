@@ -14,7 +14,7 @@ namespace Surf
             builder.Services.AddDbContext<SurfContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfContext") ?? throw new InvalidOperationException("Connection string 'SurfContext' not found.")));
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<SurfContext>();
 
 
