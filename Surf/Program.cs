@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Surf.Data;
 using Microsoft.AspNetCore.Identity;
-using Surf.Areas.Identity.Data;
 
 namespace Surf
 {
