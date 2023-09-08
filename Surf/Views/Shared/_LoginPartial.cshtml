@@ -1,14 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
-<<<<<<< HEAD
-
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
-=======
 @using Surf.Areas.Identity.Data
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
->>>>>>> NewKrav3
+
 
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))

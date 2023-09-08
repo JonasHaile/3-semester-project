@@ -14,26 +14,19 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-<<<<<<< HEAD
-=======
+
 using Surf.Areas.Identity.Data;
->>>>>>> NewKrav3
+
 
 namespace Surf.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-<<<<<<< HEAD
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ILogger<LoginModel> _logger;
-
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
-=======
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
->>>>>>> NewKrav3
+
         {
             _signInManager = signInManager;
             _logger = logger;

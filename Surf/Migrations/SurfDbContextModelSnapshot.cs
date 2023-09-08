@@ -274,7 +274,7 @@ namespace Surf.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Surfboard");
+                    b.ToTable("Surfboard", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -2,16 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Surf.Data;
 using Microsoft.AspNetCore.Identity;
-<<<<<<< HEAD
-=======
 using Surf.Areas.Identity.Data;
->>>>>>> NewKrav3
 
 namespace Surf
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext< SurfDbContext>(options =>
@@ -21,9 +18,6 @@ namespace Surf
                 .AddEntityFrameworkStores<SurfDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<SurfContext>();
 
 
             // Add services to the container.
@@ -37,7 +31,7 @@ namespace Surf
             {
                 var services = scope.ServiceProvider;
 
-                SeedData.Initialize(services);
+                await SeedData.InitializeAsync(services);
             }
 
             // Configure the HTTP request pipeline.
@@ -52,24 +46,17 @@ namespace Surf
             app.UseStaticFiles();
 
             app.UseRouting();
-<<<<<<< HEAD
-            
-=======
-                        app.UseAuthentication();;
 
->>>>>>> NewKrav3
+            app.UseAuthentication();;
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-<<<<<<< HEAD
 
             app.MapRazorPages();
 
-=======
-            app.MapRazorPages();
->>>>>>> NewKrav3
             app.Run();
         }
     }
