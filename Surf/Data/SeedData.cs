@@ -11,7 +11,7 @@ namespace Surf.Data
     {
         public static void Initialize(IServiceProvider serviceProvider)
         {
-            using (var context = new SurfContext(serviceProvider.GetRequiredService<DbContextOptions<SurfContext>>()))
+            using (var context = new SurfDbContext(serviceProvider.GetRequiredService<DbContextOptions<SurfDbContext>>()))
             {
                 // Look for any movies.
                 if (context.Surfboard.Any())

@@ -13,9 +13,9 @@ namespace Surf.Controllers
 {
     public class SurfboardsController : Controller
     {
-        private readonly SurfContext _context;
+        private readonly SurfDbContext _context;
 
-        public SurfboardsController(SurfContext context)
+        public SurfboardsController(SurfDbContext context)
         {
             _context = context;
         }

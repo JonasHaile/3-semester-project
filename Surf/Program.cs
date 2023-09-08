@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Surf.Data;
+using Microsoft.AspNetCore.Identity;
+using Surf.Areas.Identity.Data;
 
 namespace Surf
 {
@@ -9,8 +11,13 @@ namespace Surf
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDbContext<SurfContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("SurfContext") ?? throw new InvalidOperationException("Connection string 'SurfContext' not found.")));
+            builder.Services.AddDbContext< SurfDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SurfDbContext") ?? throw new InvalidOperationException("Connection string 'SurfDbContext' not found.")));
+
+                        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<SurfDbContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders();
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -36,13 +43,14 @@ namespace Surf
             app.UseStaticFiles();
 
             app.UseRouting();
+                        app.UseAuthentication();;
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-
+            app.MapRazorPages();
             app.Run();
         }
     }
