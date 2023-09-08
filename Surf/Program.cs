@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Surf.Data;
+using Microsoft.AspNetCore.Identity;
 
 namespace Surf
 {
@@ -12,8 +13,14 @@ namespace Surf
             builder.Services.AddDbContext<SurfContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfContext") ?? throw new InvalidOperationException("Connection string 'SurfContext' not found.")));
 
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<SurfContext>();
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -36,12 +43,14 @@ namespace Surf
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.MapRazorPages();
 
             app.Run();
         }
