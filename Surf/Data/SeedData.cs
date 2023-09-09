@@ -13,150 +13,151 @@ namespace Surf.Data
     {
         public static async Task InitializeAsync(IServiceProvider serviceProvider)
         {
-            //using (var context = new SurfDbContext(serviceProvider.GetRequiredService<DbContextOptions<SurfDbContext>>()))
-            //{
-            //    // Look for any movies.
-            //    if (context.Surfboard.Any())
-            //    {
-            //        context.Surfboard.RemoveRange(context.Surfboard); // Remove all records from the table
-            //        context.SaveChanges();
-            //        //return;
-            //    }
+            using (var context = new SurfDbContext(serviceProvider.GetRequiredService<DbContextOptions<SurfDbContext>>()))
+            {
+                // Look for any movies.
+                if (!context.Surfboard.Any())
+                {
+                    //context.Surfboard.RemoveRange(context.Surfboard); // Remove all records from the table
+                    //context.SaveChanges();
+                    //return;
+                    context.Surfboard.AddRange(
 
-            //    context.Surfboard.AddRange(
+                    new Surfboard
+                    {
+                        Name = "The Minilog",
+                        Length = 6,
+                        Width = 21,
+                        Thickness = 2.75,
+                        Volume = 38.8,
+                        Price = 565,
+                        Type = "Shortboard",
+                        Equipment = " ",
+                        Image = "Surf/Images/surfboard1"
+                    },
 
-            //        new Surfboard
-            //        {
-            //            Name = "The Minilog",
-            //            Length = 6,
-            //            Width = 21,
-            //            Thickness = 2.75,
-            //            Volume = 38.8,
-            //            Price = 565,
-            //            Type = "Shortboard",
-            //            Equipment = " ",
-            //            Image = "Surf/Images/surfboard1"
-            //        },
+                new Surfboard
+                {
+                    Name = "The Wide Glider",
+                    Length = 7.1,
+                    Width = 21.75,
+                    Thickness = 2.75,
+                    Volume = 44.16,
+                    Price = 685,
+                    Type = "Funboard",
+                    Equipment = " ",
+                    Image = "Surf/Images/surfboard2"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "The Wide Glider",
-            //        Length = 7.1,
-            //        Width = 21.75,
-            //        Thickness = 2.75,
-            //        Volume = 44.16,
-            //        Price = 685,
-            //        Type = "Funboard",
-            //        Equipment = " ",
-            //        Image = "Surf/Images/surfboard2"
-            //    },
+                new Surfboard
+                {
+                    Name = "The Golden Ratio",
+                    Length = 6.3,
+                    Width = 21.85,
+                    Thickness = 2.9,
+                    Volume = 43.22,
+                    Price = 695,
+                    Type = "Funboard",
+                    Equipment = " ",
+                    Image = "Surf/Images/surfboard3"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "The Golden Ratio",
-            //        Length = 6.3,
-            //        Width = 21.85,
-            //        Thickness = 2.9,
-            //        Volume = 43.22,
-            //        Price = 695,
-            //        Type = "Funboard",
-            //        Equipment = " ",
-            //        Image = "Surf/Images/surfboard3"
-            //    },
+                new Surfboard
+                {
+                    Name = "Mahi Mahi",
+                    Length = 5.4,
+                    Width = 20.75,
+                    Thickness = 2.3,
+                    Volume = 29.39,
+                    Price = 645,
+                    Type = "Fish",
+                    Equipment = " ",
+                    Image = "Surf/Images/surfboard4"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "Mahi Mahi",
-            //        Length = 5.4,
-            //        Width = 20.75,
-            //        Thickness = 2.3,
-            //        Volume = 29.39,
-            //        Price = 645,
-            //        Type = "Fish",
-            //        Equipment = " ",
-            //        Image = "Surf/Images/surfboard4"
-            //    },
+                new Surfboard
+                {
+                    Name = "The Emerald",
+                    Length = 9.2,
+                    Width = 22.8,
+                    Thickness = 2.8,
+                    Volume = 65.4,
+                    Price = 895,
+                    Type = "Longboard",
+                    Equipment = " ",
+                    Image = "Surf/Images/surfboard5"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "The Emerald",
-            //        Length = 9.2,
-            //        Width = 22.8,
-            //        Thickness = 2.8,
-            //        Volume = 65.4,
-            //        Price = 895,
-            //        Type = "Longboard",
-            //        Equipment = " ",
-            //        Image = "Surf/Images/surfboard5"
-            //    },
+                new Surfboard
+                {
+                    Name = "The Bomb",
+                    Length = 5.5,
+                    Width = 21,
+                    Thickness = 2.5,
+                    Volume = 33.7,
+                    Price = 645,
+                    Type = "Shortboard",
+                    Equipment = " ",
+                    Image = "Surf/Images/surfboard6"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "The Bomb",
-            //        Length = 5.5,
-            //        Width = 21,
-            //        Thickness = 2.5,
-            //        Volume = 33.7,
-            //        Price = 645,
-            //        Type = "Shortboard",
-            //        Equipment = " ",
-            //        Image = "Surf/Images/surfboard6"
-            //    },
+                new Surfboard
+                {
+                    Name = "Walden Magic",
+                    Length = 9.6,
+                    Width = 19.4,
+                    Thickness = 3,
+                    Volume = 80,
+                    Price = 1025,
+                    Type = "Longboard",
+                    Equipment = " ",
+                    Image = "Surf/Images/surfboard7"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "Walden Magic",
-            //        Length = 9.6,
-            //        Width = 19.4,
-            //        Thickness = 3,
-            //        Volume = 80,
-            //        Price = 1025,
-            //        Type = "Longboard",
-            //        Equipment = " ",
-            //        Image = "Surf/Images/surfboard7"
-            //    },
+                new Surfboard
+                {
+                    Name = "Naish One",
+                    Length = 12.6,
+                    Width = 30,
+                    Thickness = 6,
+                    Volume = 301,
+                    Price = 854,
+                    Type = "SUP",
+                    Equipment = "Paddle",
+                    Image = "Surf/Images/surfboard8"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "Naish One",
-            //        Length = 12.6,
-            //        Width = 30,
-            //        Thickness = 6,
-            //        Volume = 301,
-            //        Price = 854,
-            //        Type = "SUP",
-            //        Equipment = "Paddle",
-            //        Image = "Surf/Images/surfboard8"
-            //    },
+                new Surfboard
+                {
+                    Name = "Six Tourer",
+                    Length = 11.6,
+                    Width = 32,
+                    Thickness = 6,
+                    Volume = 270,
+                    Price = 611,
+                    Type = "SUP",
+                    Equipment = "Fin, Paddle, Pump, Leash",
+                    Image = "Surf/Images/surfboard9"
+                },
 
-            //    new Surfboard
-            //    {
-            //        Name = "Six Tourer",
-            //        Length = 11.6,
-            //        Width = 32,
-            //        Thickness = 6,
-            //        Volume = 270,
-            //        Price = 611,
-            //        Type = "SUP",
-            //        Equipment = "Fin, Paddle, Pump, Leash",
-            //        Image = "Surf/Images/surfboard9"
-            //    },
+                new Surfboard
+                {
+                    Name = "Naish Maliko",
+                    Length = 14,
+                    Width = 25,
+                    Thickness = 6,
+                    Volume = 330,
+                    Price = 1304,
+                    Type = "SUP",
+                    Equipment = "Fin, Paddle, Pump, Leash",
+                    Image = "Surf/Images/surfboard10"
+                });
 
-            //    new Surfboard
-            //    {
-            //        Name = "Naish Maliko",
-            //        Length = 14,
-            //        Width = 25,
-            //        Thickness = 6,
-            //        Volume = 330,
-            //        Price = 1304,
-            //        Type = "SUP",
-            //        Equipment = "Fin, Paddle, Pump, Leash",
-            //        Image = "Surf/Images/surfboard10"
-            //    });
+                    context.SaveChanges();
+                }
+            }
 
-            //    context.SaveChanges();
-            //}
+                
 
 
             //Seed Roles 
