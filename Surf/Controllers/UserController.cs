@@ -128,7 +128,11 @@ namespace Surf.Controllers
 
 
         // GET: User/Edit/5
+<<<<<<< HEAD
         [Authorize]
+=======
+        //[Authorize]
+>>>>>>> parent of d790dc3 (Krav 3 - Authenticitet)
         public async Task<IActionResult> Edit(int? id) // Rental
         {
             if (id == null || _context.Surfboard == null)
