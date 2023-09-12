@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Surf.Areas.Identity.Data;
 using Surf.Data;
 using Surf.Models;
 
@@ -14,10 +16,13 @@ namespace Surf.Controllers
     public class UserController : Controller
     {
         private readonly SurfDbContext _context;
+        private readonly UserManager<ApplicationUser> _usermananger;
 
-        public UserController(SurfDbContext context)
+        public UserController(SurfDbContext context, UserManager <ApplicationUser> usermanager)
         {
             _context = context;
+            _usermananger = usermanager;
+
         }
 
         // GET: User
@@ -27,7 +32,6 @@ namespace Surf.Controllers
     string searchString,
     int? pageNumber)
         {
-
 
 
             // Sort
@@ -55,8 +59,22 @@ namespace Surf.Controllers
 
             // Retrieve all surfboards from _context local database
             //And storing in the 'surfboards' variable
+            //var user = await _usermananger.GetUserAsync(User);
+            //var unavailableDate = DateTime.Now.AddDays(5);
+            //var surfboards = from s in _context.Surfboard
+            //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
+            //                       _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Now > r.EndDate || unavailableDate < r.StartDate)) &&
+            //                       (User != null && _context.Rental.Any(r => r.UserId == user.Id))
+            //                 select s;
+
+            var user = await _usermananger.GetUserAsync(User);
+            var unavailableDate = DateTime.Today.AddDays(5);
             var surfboards = from s in _context.Surfboard
+                             where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
+                                   (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
+                                    (user != null && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == user.Id)))
                              select s;
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 surfboards = surfboards.Where(s => s.Name.Contains(searchString)
@@ -69,6 +87,7 @@ namespace Surf.Controllers
                                        || s.Price.ToString().Contains(searchString));
             }
 
+            //RentalCheck(); // tjekker om surfboardet er udlejet eller ej. 
             //sort
             switch (sortOrder)
             {
@@ -128,12 +147,8 @@ namespace Surf.Controllers
 
 
         // GET: User/Edit/5
-<<<<<<< HEAD
         [Authorize]
-=======
-        //[Authorize]
->>>>>>> parent of d790dc3 (Krav 3 - Authenticitet)
-        public async Task<IActionResult> Edit(int? id) // Rental
+        public async Task<IActionResult> Create(int? id) // Rental
         {
             if (id == null || _context.Surfboard == null)
             {
@@ -153,39 +168,58 @@ namespace Surf.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID")] Surfboard surfboard)
+        public async Task<IActionResult> Create(DateTime startDate, [Bind("ID")] Surfboard surfboard)
         {
-            if (id != surfboard.ID)
-            {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
-            {
-                try
-                    
-                {
-                    surfboard.IsRented = true;
+            var surfboardRental = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == surfboard.ID);
+            var user = await _usermananger.GetUserAsync(User);
+            var rental = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == surfboard.ID);
+            var enddate = startDate.AddDays(5);
 
-                    _context.Update(surfboard);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+
+            if (surfboardRental != null && User != null && (rental == null || (rental.StartDate > enddate || rental.EndDate < startDate)))
+            {
+                var rentalToBeMade = new Rental
                 {
-                    if (!SurfboardExists(surfboard.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    SurfboardId = surfboardRental.ID,
+                    UserId = user.Id,
+                    StartDate = startDate,
+                    EndDate = enddate
+                };
+                if(startDate == DateTime.Today)
+                {
+                    surfboardRental.IsRented = true;    
                 }
-                return RedirectToAction(nameof(Index));
+
+                await _context.Rental.AddAsync(rentalToBeMade);
+                await _context.SaveChangesAsync();
             }
-            return View(surfboard);
+         
+            return View(surfboardRental);
         }
 
+        private async void RentalCheck()
+        {
+            var rental =  _context.Rental.Where(r => r.StartDate < DateTime.Now).ToList();
+            if (rental != null || rental.Any())
+            {
+                foreach (var r in rental)
+                {
+                    var surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == r.SurfboardId);
+                    if(r.StartDate < DateTime.Now && r.EndDate > DateTime.Now)
+                    {
+                        surfboard.IsRented = true;  
+                    }
+                   else if(r.EndDate < DateTime.Now)
+                    {
+                        surfboard.IsRented = false;
+                    }
+                       
+                }
+                await _context.SaveChangesAsync();
+
+            }
+        }
 
         private bool SurfboardExists(int id)
         {
