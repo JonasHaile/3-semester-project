@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Surf.Data;
 
@@ -11,9 +12,11 @@ using Surf.Data;
 namespace Surf.Migrations
 {
     [DbContext(typeof(SurfDbContext))]
-    partial class SurfDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230912125941_RentalModel")]
+    partial class RentalModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,7 +277,7 @@ namespace Surf.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Surfboard", (string)null);
+                    b.ToTable("Surfboard");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
