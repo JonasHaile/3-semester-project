@@ -14,6 +14,8 @@ public class SurfDbContext : IdentityDbContext<ApplicationUser>
     }
     public DbSet<Surfboard> Surfboard { get; set; } = default!;
 
+    public DbSet <Rental> Rental { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
