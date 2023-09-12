@@ -147,7 +147,7 @@ namespace Surf.Controllers
 
 
         // GET: User/Edit/5
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Create(int? id) // Rental
         {
             if (id == null || _context.Surfboard == null)
