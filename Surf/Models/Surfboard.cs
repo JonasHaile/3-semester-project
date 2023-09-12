@@ -31,5 +31,7 @@ namespace Surf.Models
         [Timestamp]
         public byte[] RowVersion { get; set; }
 
+        public bool IsRented { get; set; } = false; 
+
     }
 }
