@@ -19,5 +19,6 @@ namespace Surf.Models
 
         public ApplicationUser User { get; set; }   
         public Surfboard Surfboard { get; set; }
+        //Test
     }
 }
