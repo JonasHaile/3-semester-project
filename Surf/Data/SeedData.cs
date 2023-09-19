@@ -186,6 +186,23 @@ namespace Surf.Data
                 await userManager.AddToRoleAsync(user, Roles.Admin.ToString());
             }
 
+            var user2 = new ApplicationUser
+            {
+                UserName = "Admin2@Admin.dk",
+                Email = "Admin2@Admin.dk",
+                FirstName = "Admin2",
+                Lastname = "Admin2",
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true,
+            };
+
+            var user2InDb = await userManager.FindByEmailAsync(user2.Email);
+            if (user2InDb == null)
+            {
+                await userManager.CreateAsync(user2, "!Admin123");
+                await userManager.AddToRoleAsync(user2, Roles.Admin.ToString());
+            }
+
         }
     }
 }

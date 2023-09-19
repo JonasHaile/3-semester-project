@@ -191,10 +191,16 @@ namespace Surf.Controllers
                     surfboardRental.IsRented = true;    
                 }
 
+
                 await _context.Rental.AddAsync(rentalToBeMade);
                 await _context.SaveChangesAsync();
+
+                TempData["SuccesMessage"] = $"Surfboard is now rented from {startDate.ToShortDateString()} to {enddate.ToShortDateString()}";
             }
-         
+         else
+            {
+                ModelState.AddModelError(string.Empty, "Surfboard not available");
+            }
             return View(surfboardRental);
         }
 

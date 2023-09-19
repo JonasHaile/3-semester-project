@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Surf.Data;
 using Microsoft.AspNetCore.Identity;
 using Surf.Areas.Identity.Data;
+using System.Globalization;
+
 
 namespace Surf
 {
@@ -10,6 +12,15 @@ namespace Surf
     {
         public static async Task Main(string[] args)
         {
+            //// Opret en CultureInfo med punkt som decimal separator
+            //CultureInfo cultureInfo = new CultureInfo("en-US");
+            //cultureInfo.NumberFormat.NumberDecimalDigits = 2;
+            //cultureInfo.NumberFormat.CurrencyDecimalSeparator = ".";
+            //// Anvend den nye kultur til din applikation
+            //System.Threading.Thread.CurrentThread.CurrentCulture = cultureInfo;
+            //Thread.CurrentThread.CurrentUICulture = cultureInfo; 
+
+
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext< SurfDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SurfDbContext") ?? throw new InvalidOperationException("Connection string 'SurfDbContext' not found.")));

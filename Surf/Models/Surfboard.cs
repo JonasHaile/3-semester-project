@@ -20,6 +20,7 @@ namespace Surf.Models
         [Required(ErrorMessage = "*")]
         public double Volume { get; set; }
         [Required(ErrorMessage = "*")]
+      
         public decimal Price { get; set; }
         [Required(ErrorMessage = "*")]
         public string Type { get; set; }
