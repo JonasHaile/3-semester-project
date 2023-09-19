@@ -288,6 +288,24 @@ namespace Surf.Controllers
             return View(surfboardToUpdate);
         }
 
+        // GET: Surfboards/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null || _context.Surfboard == null)
+            {
+                return NotFound();
+            }
+
+            var surfboard = await _context.Surfboard
+                .FirstOrDefaultAsync(m => m.ID == id);
+            if (surfboard == null)
+            {
+                return NotFound();
+            }
+
+            return View(surfboard);
+        }
+
         // POST: Surfboards/Delete/5
         [HttpPost, ActionName("Delete")]
             [ValidateAntiForgeryToken]
