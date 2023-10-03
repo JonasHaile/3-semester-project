@@ -201,10 +201,7 @@ namespace Surf.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Surfboard not available");
             }
-<<<<<<< HEAD
-=======
 
->>>>>>> 37cd2b0b97f92e56860ea700e73465f0347fa908
             return View(surfboardRental);
         }
 
