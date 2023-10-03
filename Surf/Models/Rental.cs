@@ -5,10 +5,11 @@ namespace Surf.Models
 {
     public class Rental
     {
-        
-        public int RentalId { get; set; }
 
+        public int RentalId { get; set; }
+        [Required]
         public string UserId { get; set; }
+        [Required]
         public int SurfboardId { get; set; }
         [DataType(DataType.Date)]
         [Required]
@@ -20,5 +21,6 @@ namespace Surf.Models
         public ApplicationUser User { get; set; }   
         public Surfboard Surfboard { get; set; }
         //Test
+
     }
 }

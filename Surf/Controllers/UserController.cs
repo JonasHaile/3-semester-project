@@ -18,7 +18,7 @@ namespace Surf.Controllers
         private readonly SurfDbContext _context;
         private readonly UserManager<ApplicationUser> _usermananger;
 
-        public UserController(SurfDbContext context, UserManager <ApplicationUser> usermanager)
+        public UserController(SurfDbContext context, UserManager<ApplicationUser> usermanager)
         {
             _context = context;
             _usermananger = usermanager;
@@ -186,9 +186,9 @@ namespace Surf.Controllers
                     StartDate = startDate,
                     EndDate = enddate
                 };
-                if(startDate == DateTime.Today)
+                if (startDate == DateTime.Today)
                 {
-                    surfboardRental.IsRented = true;    
+                    surfboardRental.IsRented = true;
                 }
 
 
@@ -201,26 +201,30 @@ namespace Surf.Controllers
             {
                 ModelState.AddModelError(string.Empty, "Surfboard not available");
             }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 37cd2b0b97f92e56860ea700e73465f0347fa908
             return View(surfboardRental);
         }
 
         private async void RentalCheck()
         {
-            var rental =  _context.Rental.Where(r => r.StartDate < DateTime.Now).ToList();
+            var rental = _context.Rental.Where(r => r.StartDate < DateTime.Now).ToList();
             if (rental != null || rental.Any())
             {
                 foreach (var r in rental)
                 {
                     var surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == r.SurfboardId);
-                    if(r.StartDate < DateTime.Now && r.EndDate > DateTime.Now)
+                    if (r.StartDate < DateTime.Now && r.EndDate > DateTime.Now)
                     {
-                        surfboard.IsRented = true;  
+                        surfboard.IsRented = true;
                     }
-                   else if(r.EndDate < DateTime.Now)
+                    else if (r.EndDate < DateTime.Now)
                     {
                         surfboard.IsRented = false;
                     }
-                       
+
                 }
                 await _context.SaveChangesAsync();
 
@@ -229,7 +233,7 @@ namespace Surf.Controllers
 
         private bool SurfboardExists(int id)
         {
-          return _context.Surfboard.Any(e => e.ID == id);
+            return _context.Surfboard.Any(e => e.ID == id);
         }
 
 

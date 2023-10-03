@@ -12,8 +12,8 @@ using Surf.Data;
 namespace Surf.Migrations
 {
     [DbContext(typeof(SurfDbContext))]
-    [Migration("20230912084055_NewRentalModel")]
-    partial class NewRentalModel
+    [Migration("20230912125941_RentalModel")]
+    partial class RentalModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,35 +229,6 @@ namespace Surf.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("Surf.Models.Rental", b =>
-                {
-                    b.Property<int>("RentalId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RentalId"));
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("SurfboardId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("RentalId");
-
-                    b.HasIndex("SurfboardId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Rental");
-                });
-
             modelBuilder.Entity("Surf.Models.Surfboard", b =>
                 {
                     b.Property<int>("ID")
@@ -358,23 +329,6 @@ namespace Surf.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Surf.Models.Rental", b =>
-                {
-                    b.HasOne("Surf.Models.Surfboard", "Surfboard")
-                        .WithMany()
-                        .HasForeignKey("SurfboardId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Surf.Areas.Identity.Data.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Surfboard");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

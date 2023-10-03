@@ -1,7 +1,7 @@
 ﻿@model Surf.Models.Surfboard
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 <h1>Rental</h1>
@@ -80,14 +80,10 @@
 </div>
     </div>
 
-    <form asp-action="Create">
+    <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
             <input type="hidden" asp-for="RowVersion" />
-            <label for="startDate">
-                Pick a rental date
-            </label>
-            <input type="date" id="startDate" name="startDate"/>
     <div class="form-group">
         <input type="submit" value="Rent" class="btn btn-primary" />
     </div>

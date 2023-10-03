@@ -90,8 +90,8 @@ namespace Surf.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            var rentalEnities = _context.Rental.Where(r => r.UserId == user.Id);
-            _context.RemoveRange(rentalEnities);
+            //var rentalEntities = _context.Rental.Where(r => r.UserId == user.Id);
+            //_context.RemoveRange(rentalEntities);
 
             var result = await _userManager.DeleteAsync(user);
             var userId = await _userManager.GetUserIdAsync(user);
