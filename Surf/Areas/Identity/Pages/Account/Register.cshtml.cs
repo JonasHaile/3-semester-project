@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Surf.Areas.Identity.Data;
+using Surf.Data;
 using Surf.Models;
 
 namespace Surf.Areas.Identity.Pages.Account

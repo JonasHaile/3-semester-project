@@ -23,11 +23,12 @@ namespace Surf
 
         public bool HasNextPage => PageIndex < TotalPages;
 
-        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize)
+        public static async Task<PaginatedList<T>> CreateAsync(IEnumerable<T> source, int pageIndex, int pageSize)
         {
-            var count = await source.CountAsync();
-            var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+            var count = source.Count(); // Count will execute immediately on IEnumerable
+            var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList(); // ToList to execute the query immediately
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
+
     }
 }

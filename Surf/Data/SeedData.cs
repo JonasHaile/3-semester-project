@@ -33,7 +33,7 @@ namespace Surf.Data
                         Price = 565,
                         Type = "Shortboard",
                         Equipment = " ",
-                        Image = "Surf/Images/surfboard1"
+                        Image = "/Images/surfboard1.jpg"
                     },
 
                 new Surfboard
@@ -46,7 +46,7 @@ namespace Surf.Data
                     Price = 685,
                     Type = "Funboard",
                     Equipment = " ",
-                    Image = "Surf/Images/surfboard2"
+                    Image = "/Images/surfboard2.jpg"
                 },
 
                 new Surfboard
@@ -59,7 +59,7 @@ namespace Surf.Data
                     Price = 695,
                     Type = "Funboard",
                     Equipment = " ",
-                    Image = "Surf/Images/surfboard3"
+                    Image = "/Images/surfboard3.jpg"
                 },
 
                 new Surfboard
@@ -72,7 +72,7 @@ namespace Surf.Data
                     Price = 645,
                     Type = "Fish",
                     Equipment = " ",
-                    Image = "Surf/Images/surfboard4"
+                    Image = "/Images/surfboard4.jpg"
                 },
 
                 new Surfboard
@@ -85,7 +85,7 @@ namespace Surf.Data
                     Price = 895,
                     Type = "Longboard",
                     Equipment = " ",
-                    Image = "Surf/Images/surfboard5"
+                    Image = "/Images/surfboard5.jpg"
                 },
 
                 new Surfboard
@@ -98,7 +98,7 @@ namespace Surf.Data
                     Price = 645,
                     Type = "Shortboard",
                     Equipment = " ",
-                    Image = "Surf/Images/surfboard6"
+                    Image = "/Images/surfboard6.jpeg"
                 },
 
                 new Surfboard
@@ -111,7 +111,7 @@ namespace Surf.Data
                     Price = 1025,
                     Type = "Longboard",
                     Equipment = " ",
-                    Image = "Surf/Images/surfboard7"
+                    Image = "/Images/surfboard7.jpg"
                 },
 
                 new Surfboard
@@ -124,7 +124,7 @@ namespace Surf.Data
                     Price = 854,
                     Type = "SUP",
                     Equipment = "Paddle",
-                    Image = "Surf/Images/surfboard8"
+                    Image = "/Images/surfboard8.jpg"
                 },
 
                 new Surfboard
@@ -137,7 +137,7 @@ namespace Surf.Data
                     Price = 611,
                     Type = "SUP",
                     Equipment = "Fin, Paddle, Pump, Leash",
-                    Image = "Surf/Images/surfboard9"
+                    Image = "/Images/surfboard9.jpeg"
                 },
 
                 new Surfboard
@@ -150,7 +150,7 @@ namespace Surf.Data
                     Price = 1304,
                     Type = "SUP",
                     Equipment = "Fin, Paddle, Pump, Leash",
-                    Image = "Surf/Images/surfboard10"
+                    Image = "/Images/surfboard10.jpeg"
                 });
 
                     context.SaveChanges();

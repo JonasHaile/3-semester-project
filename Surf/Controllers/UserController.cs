@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -7,9 +6,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Surf.Areas.Identity.Data;
 using Surf.Data;
 using Surf.Models;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Surf.Controllers
 {
@@ -17,12 +19,13 @@ namespace Surf.Controllers
     {
         private readonly SurfDbContext _context;
         private readonly UserManager<ApplicationUser> _usermananger;
+        private readonly IHttpClientFactory _iHttpClientFactory;
 
-        public UserController(SurfDbContext context, UserManager <ApplicationUser> usermanager)
+        public UserController(SurfDbContext context, UserManager <ApplicationUser> usermanager, IHttpClientFactory iHttpClientFactory)
         {
             _context = context;
             _usermananger = usermanager;
-
+            _iHttpClientFactory = iHttpClientFactory;
         }
 
         // GET: User
@@ -32,6 +35,15 @@ namespace Surf.Controllers
     string searchString,
     int? pageNumber)
         {
+            IEnumerable<Surfboard> surfboards = Enumerable.Empty<Surfboard>();
+            HttpClient client = _iHttpClientFactory.CreateClient("API");
+            HttpResponseMessage response = client.GetAsync("API").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                surfboards = JsonConvert.DeserializeObject<IEnumerable<Surfboard>>(data);
+            }
+
 
 
             // Sort
@@ -67,13 +79,13 @@ namespace Surf.Controllers
             //                       (User != null && _context.Rental.Any(r => r.UserId == user.Id))
             //                 select s;
 
-            var user = await _usermananger.GetUserAsync(User);
-            var unavailableDate = DateTime.Today.AddDays(5);
-            var surfboards = from s in _context.Surfboard
-                             where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
-                                   (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
-                                    (user != null && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == user.Id)))
-                             select s;
+            //var user = await _usermananger.GetUserAsync(User);
+            //var unavailableDate = DateTime.Today.AddDays(5);
+            //var surfboards = from s in _context.Surfboard
+            //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
+            //                       (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
+            //                        (user != null && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == user.Id)))
+            //                 select s;
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -142,7 +154,9 @@ namespace Surf.Controllers
             }
 
             int pageSize = 5;
-            return View(await PaginatedList<Surfboard>.CreateAsync(surfboards.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Surfboard>.CreateAsync(surfboards, pageNumber ?? 1, pageSize));
+
+
         }
 
 
@@ -150,16 +164,19 @@ namespace Surf.Controllers
         [Authorize]
         public async Task<IActionResult> Create(int? id) // Rental
         {
-            if (id == null || _context.Surfboard == null)
+            HttpClient client = _iHttpClientFactory.CreateClient("API");
+            HttpResponseMessage response = client.GetAsync($"API/{id}").Result;
+            Surfboard surfboard = new();
+            if (response.IsSuccessStatusCode)
+            {
+                var data = response.Content.ReadAsStringAsync().Result;
+                surfboard = JsonConvert.DeserializeObject<Surfboard>(data);
+            }
+            if (id == null || surfboard.ID == 0)
             {
                 return NotFound();
             }
 
-            var surfboard = await _context.Surfboard.FindAsync(id);
-            if (surfboard == null)
-            {
-                return NotFound();
-            }
             return View(surfboard);
         }
 
@@ -170,38 +187,22 @@ namespace Surf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DateTime startDate, [Bind("ID")] Surfboard surfboard)
         {
-
-            var surfboardRental = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == surfboard.ID);
-            var user = await _usermananger.GetUserAsync(User);
-            var rental = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == surfboard.ID);
-            var enddate = startDate.AddDays(5);
-
-
-            if (surfboardRental != null && User != null && (rental == null || (rental.StartDate > enddate || rental.EndDate < startDate)))
+            HttpClient client = _iHttpClientFactory.CreateClient("API");
+            HttpResponseMessage response = client.PostAsync($"API/Post?startDate={startDate}&id={surfboard.ID}", null).Result;
+            
+            if (response.IsSuccessStatusCode)
             {
-                var rentalToBeMade = new Rental
-                {
-                    SurfboardId = surfboardRental.ID,
-                    UserId = user.Id,
-                    StartDate = startDate,
-                    EndDate = enddate
-                };
-                if(startDate == DateTime.Today)
-                {
-                    surfboardRental.IsRented = true;    
-                }
-
-
-                await _context.Rental.AddAsync(rentalToBeMade);
-                await _context.SaveChangesAsync();
-
-                TempData["SuccesMessage"] = $"Surfboard is now rented from {startDate.ToShortDateString()} to {enddate.ToShortDateString()}";
+                var data = response.Content.ReadAsStringAsync().Result;
+                surfboard = JsonConvert.DeserializeObject<Surfboard>(data);
+                TempData["SuccessMessage"] = $"Surfboard is now rented";
             }
-         else
+            else
             {
-                ModelState.AddModelError(string.Empty, "Surfboard not available");
+                ModelState.AddModelError(string.Empty, "Unable to rent surfboard");
             }
-            return View(surfboardRental);
+            return View("Index");
+            
+
         }
 
         private async void RentalCheck()

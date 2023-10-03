@@ -12,7 +12,7 @@ using Surf.Models;
 
 namespace Surf.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class APIController : ControllerBase
     {
@@ -88,8 +88,8 @@ namespace Surf.Controllers
 
         // POST: api/API
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Rental>> PostRental(DateTime startDate, int id)
+        [HttpPost("/Post")]
+        public async Task<ActionResult<Surfboard>> Post([FromQuery]DateTime startDate, [FromQuery] int id)
         {
             var surfboardRental = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == id);
             var user = await _userManager.GetUserAsync(User);

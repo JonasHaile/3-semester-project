@@ -31,6 +31,13 @@ namespace Surf
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
 
+            builder.Services.AddHttpClient("API", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7083/");
+                //client.DefaultRequestHeaders.Add("Accept", "application/json");
+                // Add other configurations as needed
+                
+            });
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
