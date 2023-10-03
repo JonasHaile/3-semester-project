@@ -188,21 +188,29 @@ namespace Surf.Controllers
         public async Task<IActionResult> Create(DateTime startDate, [Bind("ID")] Surfboard surfboard)
         {
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.PostAsync($"API/Post?startDate={startDate}&id={surfboard.ID}", null).Result;
-            
+
+            // Opret en dictionary med data, der skal sendes
+            var requestData = new Dictionary<string, string>
+    {
+        { "startDate", startDate.ToString("yyyy-MM-dd") }, // Konverter til ønsket datoformat
+        { "id", surfboard.ID.ToString() }
+    };
+
+            var content = new FormUrlEncodedContent(requestData);
+
+            HttpResponseMessage response = await client.PostAsync("API/Post", content); // Send data i anmodningens krop
+
             if (response.IsSuccessStatusCode)
             {
-                var data = response.Content.ReadAsStringAsync().Result;
+                var data = await response.Content.ReadAsStringAsync();
                 surfboard = JsonConvert.DeserializeObject<Surfboard>(data);
-                TempData["SuccessMessage"] = $"Surfboard is now rented";
+                TempData["SuccessMessage"] = "Surfboard is now rented";
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Unable to rent surfboard");
             }
             return View("Index");
-            
-
         }
 
         private async void RentalCheck()
