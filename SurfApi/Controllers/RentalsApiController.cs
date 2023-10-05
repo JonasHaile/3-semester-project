@@ -3,26 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Surf.Areas.Identity.Data;
-using Surf.Data;
-using Surf.Models;
+using SurfApi.Data;
+using SurfApi.Models;
 
-namespace Surf.Controllers
+namespace SurfApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class APIController : ControllerBase
+    public class RentalsApiController : ControllerBase
     {
-        private readonly SurfDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SurfApiContext _context;
 
-        public APIController(SurfDbContext context, UserManager<ApplicationUser> userManager)
+        public RentalsApiController(SurfApiContext context)
         {
             _context = context;
-            _userManager = userManager;
         }
 
         // GET: api/RentalsAPI
@@ -35,13 +31,14 @@ namespace Surf.Controllers
                 return NoContent();
             }
             else
-            { return Ok(await _context.Surfboard.ToListAsync()); }    
-           
+            { return Ok(await _context.Surfboard.ToListAsync()); }
+
 
 
         }
 
-        // GET: api/API/5
+
+        //GET: api/API/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Surfboard>> GetSurfboard(int id)
         {
@@ -52,11 +49,11 @@ namespace Surf.Controllers
                 return NotFound();
             }
 
-            return surfboard;
+            return Ok(surfboard);
         }
 
-        // PUT: api/RentalsAPI/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //// PUT: api/RentalsApi/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]
         //public async Task<IActionResult> PutRental(int id, Rental rental)
         //{
@@ -86,13 +83,27 @@ namespace Surf.Controllers
         //    return NoContent();
         //}
 
+        //// POST: api/RentalsApi
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Rental>> PostRental(Rental rental)
+        //{
+        //  if (_context.Rental == null)
+        //  {
+        //      return Problem("Entity set 'SurfApiContext.Rental'  is null.");
+        //  }
+        //    _context.Rental.Add(rental);
+        //    await _context.SaveChangesAsync();
+
+        //    return CreatedAtAction("GetRental", new { id = rental.RentalId }, rental);
+        //}
+
         // POST: api/API
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost("/Post")]
-        public async Task<ActionResult<Surfboard>> Post([FromQuery]DateTime startDate, [FromQuery] int id)
+        [HttpPost]
+        public async Task<ActionResult<Surfboard>> Post([FromQuery] DateTime startDate, [FromQuery] int id)
         {
             var surfboardRental = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == id);
-            var user = await _userManager.GetUserAsync(User);
             var rental = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == id);
             var enddate = startDate.AddDays(5);
 
@@ -102,7 +113,7 @@ namespace Surf.Controllers
                 var rentalToBeMade = new Rental
                 {
                     SurfboardId = surfboardRental.ID,
-                    UserId = user.Id,
+                    UserId = "",
                     StartDate = startDate,
                     EndDate = enddate
                 };
@@ -124,10 +135,14 @@ namespace Surf.Controllers
             return Ok(surfboardRental);
         }
 
-        // DELETE: api/API/5
+        //// DELETE: api/RentalsApi/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> DeleteRental(int id)
         //{
+        //    if (_context.Rental == null)
+        //    {
+        //        return NotFound();
+        //    }
         //    var rental = await _context.Rental.FindAsync(id);
         //    if (rental == null)
         //    {
@@ -142,7 +157,7 @@ namespace Surf.Controllers
 
         //private bool RentalExists(int id)
         //{
-        //    return _context.Rental.Any(e => e.RentalId == id);
+        //    return (_context.Rental?.Any(e => e.RentalId == id)).GetValueOrDefault();
         //}
     }
 }

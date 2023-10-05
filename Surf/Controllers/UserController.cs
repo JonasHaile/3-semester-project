@@ -12,6 +12,7 @@ using Surf.Data;
 using Surf.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text;
 
 namespace Surf.Controllers
 {
@@ -37,7 +38,7 @@ namespace Surf.Controllers
         {
             IEnumerable<Surfboard> surfboards = Enumerable.Empty<Surfboard>();
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.GetAsync("API").Result;
+            HttpResponseMessage response = client.GetAsync("RentalsApi").Result;
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
@@ -161,11 +162,11 @@ namespace Surf.Controllers
 
 
         // GET: User/Edit/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Create(int? id) // Rental
         {
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.GetAsync($"API/{id}").Result;
+            HttpResponseMessage response = client.GetAsync($"RentalsApi/{id}").Result;
             Surfboard surfboard = new();
             if (response.IsSuccessStatusCode)
             {
@@ -184,12 +185,31 @@ namespace Surf.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DateTime startDate, [Bind("ID")] Surfboard surfboard)
         {
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.PostAsync($"API/Post?startDate={startDate}&id={surfboard.ID}", null).Result;
-            
+            HttpResponseMessage response = client.PostAsync($"RentalsApi/Post?startDate={startDate}&id={surfboard.ID}", null).Result;
+            //var surfboard1 = new Surfboard()
+            //{
+            //    ID = 0,
+            //    Name = "Hej",
+            //    Length = 10,
+            //    Width = 10,
+            //    Thickness = 10,
+            //    Volume = 10,
+            //    Price = 10,
+            //    Type  = "Hej hej",
+            //    Equipment = "",
+            //    Image = "",
+
+            //};
+            //var JsonSurfboard = JsonConvert.SerializeObject(surfboard1);
+            ////HttpResponseMessage response = client.PostAsync("API/Surfboards", JsonSurfboard);
+            //var content = new StringContent(JsonSurfboard, Encoding.UTF8, "application/json");
+
+            //HttpResponseMessage response = await client.PostAsync("Surfboards", content);
+
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;

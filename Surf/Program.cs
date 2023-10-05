@@ -33,10 +33,10 @@ namespace Surf
 
             builder.Services.AddHttpClient("API", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7083/");
-                //client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.BaseAddress = new Uri("https://localhost:7054/");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
                 // Add other configurations as needed
-                
+
             });
 
             // Add services to the container.
