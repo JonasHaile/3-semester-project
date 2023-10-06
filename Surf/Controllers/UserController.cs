@@ -38,13 +38,28 @@ namespace Surf.Controllers
     int? pageNumber)
         {
             IEnumerable<Surfboard> surfboards = Enumerable.Empty<Surfboard>();
+            var user = await _usermananger.GetUserAsync(User);
             //IEnumerable<Rental> rentals = Enumerable.Empty<Rental>();
-            HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage boardResponse = client.GetAsync("RentalsApi/Boards").Result;
-            if (boardResponse.IsSuccessStatusCode)
+            if (user != null)
             {
-                var data = boardResponse.Content.ReadAsStringAsync().Result;
-                surfboards = JsonConvert.DeserializeObject<IEnumerable<Surfboard>>(data);
+                HttpClient client = _iHttpClientFactory.CreateClient("API");
+                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/Boards/{user.Id}").Result;
+                if (boardResponse.IsSuccessStatusCode)
+                {
+                    var data = boardResponse.Content.ReadAsStringAsync().Result;
+                    surfboards = JsonConvert.DeserializeObject<IEnumerable<Surfboard>>(data);
+                }
+            }
+            else
+            {
+                string notsigned = "NotSignedIn";
+                HttpClient client = _iHttpClientFactory.CreateClient("API");
+                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/Boards/{notsigned}").Result;
+                if (boardResponse.IsSuccessStatusCode)
+                {
+                    var data = boardResponse.Content.ReadAsStringAsync().Result;
+                    surfboards = JsonConvert.DeserializeObject<IEnumerable<Surfboard>>(data);
+                }
             }
             //HttpResponseMessage rentalResponse = client.GetAsync("RentalsApi/Rentals").Result;
             //if (rentalResponse.IsSuccessStatusCode)
@@ -58,7 +73,7 @@ namespace Surf.Controllers
             // Retrieve all surfboards from _context local database
             //And storing in the 'surfboards' variable
 
-            //var user = await _usermananger.GetUserAsync(User);
+
             //var unavailableDate = DateTime.Today.AddDays(5)
             //surfboards = from s in _context.Surfboard
             //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||

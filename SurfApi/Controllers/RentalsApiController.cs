@@ -22,8 +22,8 @@ namespace SurfApi.Controllers
         }
 
         // GET: RentalsAPI/Boards
-        [HttpGet("Boards")]
-        public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards()
+        [HttpGet("Boards/{userId}")]
+        public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards(string userId)
         {
 
             if (!_context.Surfboard.Any())
@@ -31,7 +31,16 @@ namespace SurfApi.Controllers
                 return NoContent();
             }
             else
-            { return Ok(await _context.Surfboard.ToListAsync()); }
+            {
+
+                var unavailableDate = DateTime.Today.AddDays(5);
+                var surfboards = from s in _context.Surfboard
+                             where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
+                                   (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
+                                    (userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)))
+                             select s;
+                return Ok(await surfboards.ToListAsync()); 
+            }
         }
 
         [HttpGet("Rentals")]
