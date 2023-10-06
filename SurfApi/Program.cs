@@ -34,6 +34,8 @@ namespace SurfApi
                 app.UseSwaggerUI();
             }
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

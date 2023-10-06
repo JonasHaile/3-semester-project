@@ -4,7 +4,8 @@ using Surf.Data;
 using Microsoft.AspNetCore.Identity;
 using Surf.Areas.Identity.Data;
 using System.Globalization;
-
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Net.Http.Headers;
 
 namespace Surf
 {
@@ -34,7 +35,8 @@ namespace Surf
             builder.Services.AddHttpClient("API", client =>
             {
                 client.BaseAddress = new Uri("https://localhost:7054/");
-                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 // Add other configurations as needed
 
             });

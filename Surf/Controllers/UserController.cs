@@ -13,6 +13,7 @@ using Surf.Models;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text;
+using System.Drawing.Printing;
 
 namespace Surf.Controllers
 {
@@ -37,14 +38,33 @@ namespace Surf.Controllers
     int? pageNumber)
         {
             IEnumerable<Surfboard> surfboards = Enumerable.Empty<Surfboard>();
+            //IEnumerable<Rental> rentals = Enumerable.Empty<Rental>();
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.GetAsync("RentalsApi").Result;
-            if (response.IsSuccessStatusCode)
+            HttpResponseMessage boardResponse = client.GetAsync("RentalsApi/Boards").Result;
+            if (boardResponse.IsSuccessStatusCode)
             {
-                var data = response.Content.ReadAsStringAsync().Result;
+                var data = boardResponse.Content.ReadAsStringAsync().Result;
                 surfboards = JsonConvert.DeserializeObject<IEnumerable<Surfboard>>(data);
             }
+            //HttpResponseMessage rentalResponse = client.GetAsync("RentalsApi/Rentals").Result;
+            //if (rentalResponse.IsSuccessStatusCode)
+            //{
+            //    var data = rentalResponse.Content.ReadAsStringAsync().Result;
+            //    rentals = JsonConvert.DeserializeObject<IEnumerable<Rental>>(data);
+            //}
 
+
+
+            // Retrieve all surfboards from _context local database
+            //And storing in the 'surfboards' variable
+
+            //var user = await _usermananger.GetUserAsync(User);
+            //var unavailableDate = DateTime.Today.AddDays(5)
+            //surfboards = from s in _context.Surfboard
+            //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
+            //                       (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
+            //                        (user != null && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == user.Id)))
+            //                 select s;
 
 
             // Sort
@@ -70,23 +90,7 @@ namespace Surf.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            // Retrieve all surfboards from _context local database
-            //And storing in the 'surfboards' variable
-            //var user = await _usermananger.GetUserAsync(User);
-            //var unavailableDate = DateTime.Now.AddDays(5);
-            //var surfboards = from s in _context.Surfboard
-            //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
-            //                       _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Now > r.EndDate || unavailableDate < r.StartDate)) &&
-            //                       (User != null && _context.Rental.Any(r => r.UserId == user.Id))
-            //                 select s;
-
-            //var user = await _usermananger.GetUserAsync(User);
-            //var unavailableDate = DateTime.Today.AddDays(5);
-            //var surfboards = from s in _context.Surfboard
-            //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
-            //                       (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
-            //                        (user != null && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == user.Id)))
-            //                 select s;
+            
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -185,73 +189,64 @@ namespace Surf.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DateTime startDate, [Bind("ID")] Surfboard surfboard)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(DateTime startDate, Surfboard surfboard)
         {
+            var id = _usermananger.GetUserId(User);
+            Rental rental = new Rental()
+            {
+                SurfboardId = surfboard.ID,
+                UserId = id,
+                StartDate = startDate,
+                EndDate = startDate.AddDays(5),
+                Surfboard = surfboard
+            };
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.PostAsync($"RentalsApi/Post?startDate={startDate}&id={surfboard.ID}", null).Result;
-            //var surfboard1 = new Surfboard()
-            //{
-            //    ID = 0,
-            //    Name = "Hej",
-            //    Length = 10,
-            //    Width = 10,
-            //    Thickness = 10,
-            //    Volume = 10,
-            //    Price = 10,
-            //    Type  = "Hej hej",
-            //    Equipment = "",
-            //    Image = "",
-
-            //};
-            //var JsonSurfboard = JsonConvert.SerializeObject(surfboard1);
-            ////HttpResponseMessage response = client.PostAsync("API/Surfboards", JsonSurfboard);
-            //var content = new StringContent(JsonSurfboard, Encoding.UTF8, "application/json");
-
-            //HttpResponseMessage response = await client.PostAsync("Surfboards", content);
+            HttpResponseMessage response = client.PostAsJsonAsync($"RentalsApi", rental).Result;
+            
 
             if (response.IsSuccessStatusCode)
             {
                 var data = response.Content.ReadAsStringAsync().Result;
                 surfboard = JsonConvert.DeserializeObject<Surfboard>(data);
-                TempData["SuccessMessage"] = $"Surfboard is now rented";
+                TempData["SuccesMessage"] = $"Surfboard is now rented";
             }
             else
             {
                 ModelState.AddModelError(string.Empty, "Unable to rent surfboard");
             }
-            return View("Index");
+            return View(surfboard);
             
 
         }
 
-        private async void RentalCheck()
-        {
-            var rental =  _context.Rental.Where(r => r.StartDate < DateTime.Now).ToList();
-            if (rental != null || rental.Any())
-            {
-                foreach (var r in rental)
-                {
-                    var surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == r.SurfboardId);
-                    if(r.StartDate < DateTime.Now && r.EndDate > DateTime.Now)
-                    {
-                        surfboard.IsRented = true;  
-                    }
-                   else if(r.EndDate < DateTime.Now)
-                    {
-                        surfboard.IsRented = false;
-                    }
+        //private async void RentalCheck()
+        //{
+        //    var rental =  _context.Rental.Where(r => r.StartDate < DateTime.Now).ToList();
+        //    if (rental != null || rental.Any())
+        //    {
+        //        foreach (var r in rental)
+        //        {
+        //            var surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == r.SurfboardId);
+        //            if(r.StartDate < DateTime.Now && r.EndDate > DateTime.Now)
+        //            {
+        //                surfboard.IsRented = true;  
+        //            }
+        //           else if(r.EndDate < DateTime.Now)
+        //            {
+        //                surfboard.IsRented = false;
+        //            }
                        
-                }
-                await _context.SaveChangesAsync();
+        //        }
+        //        await _context.SaveChangesAsync();
 
-            }
-        }
+        //    }
+        //}
 
-        private bool SurfboardExists(int id)
-        {
-          return _context.Surfboard.Any(e => e.ID == id);
-        }
+        //private bool SurfboardExists(int id)
+        //{
+        //  return _context.Surfboard.Any(e => e.ID == id);
+        //}
 
 
     }

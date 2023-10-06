@@ -21,9 +21,9 @@ namespace SurfApi.Controllers
             _context = context;
         }
 
-        // GET: api/RentalsAPI
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Surfboard>>> GetAll()
+        // GET: RentalsAPI/Boards
+        [HttpGet("Boards")]
+        public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards()
         {
 
             if (!_context.Surfboard.Any())
@@ -32,9 +32,18 @@ namespace SurfApi.Controllers
             }
             else
             { return Ok(await _context.Surfboard.ToListAsync()); }
+        }
 
+        [HttpGet("Rentals")]
+        public async Task<ActionResult<IEnumerable<Rental>>> GetAllRentals()
+        {
 
-
+            if (!_context.Rental.Any())
+            {
+                return NoContent();
+            }
+            else
+            { return Ok(await _context.Rental.ToListAsync()); }
         }
 
 
@@ -101,38 +110,25 @@ namespace SurfApi.Controllers
         // POST: api/API
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Surfboard>> Post([FromQuery] DateTime startDate, [FromQuery] int id)
+        public async Task<ActionResult<Surfboard>> Post([FromBody]Rental rental)
         {
-            var surfboardRental = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == id);
-            var rental = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == id);
-            var enddate = startDate.AddDays(5);
+            rental.Surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == rental.SurfboardId);
+            var rentalExist = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == rental.SurfboardId);
+             
 
 
-            if (surfboardRental != null && User != null && (rental == null || (rental.StartDate > enddate || rental.EndDate < startDate)))
+            if (rental.Surfboard != null && rental.UserId != null && (rentalExist == null || (rentalExist.StartDate > rental.EndDate || rentalExist.EndDate < rental.StartDate)))
             {
-                var rentalToBeMade = new Rental
-                {
-                    SurfboardId = surfboardRental.ID,
-                    UserId = "",
-                    StartDate = startDate,
-                    EndDate = enddate
-                };
-                if (startDate == DateTime.Today)
-                {
-                    surfboardRental.IsRented = true;
-                }
 
-
-                await _context.Rental.AddAsync(rentalToBeMade);
+                await _context.Rental.AddAsync(rental);
                 await _context.SaveChangesAsync();
-
-                //TempData["SuccesMessage"] = $"Surfboard is now rented from {startDate.ToShortDateString()} to {enddate.ToShortDateString()}";
+                
             }
             else
             {
-                return BadRequest("Surfboard not available");
+                return NotFound("Surfboard not available");
             }
-            return Ok(surfboardRental);
+            return Ok(rental.Surfboard);
         }
 
         //// DELETE: api/RentalsApi/5
