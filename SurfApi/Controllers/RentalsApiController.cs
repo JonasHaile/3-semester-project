@@ -22,7 +22,7 @@ namespace SurfApi.Controllers
         }
 
         // GET: RentalsAPI/Boards
-        [HttpGet("Boards/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards(string userId)
         {
 
@@ -43,17 +43,7 @@ namespace SurfApi.Controllers
             }
         }
 
-        [HttpGet("Rentals")]
-        public async Task<ActionResult<IEnumerable<Rental>>> GetAllRentals()
-        {
-
-            if (!_context.Rental.Any())
-            {
-                return NoContent();
-            }
-            else
-            { return Ok(await _context.Rental.ToListAsync()); }
-        }
+        
 
 
         //GET: api/API/5

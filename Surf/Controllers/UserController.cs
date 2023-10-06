@@ -37,13 +37,16 @@ namespace Surf.Controllers
     string searchString,
     int? pageNumber)
         {
+
+            // Retrieve all surfboards from _context local database
+            //And storing in the 'surfboards' variable
             IEnumerable<Surfboard> surfboards = Enumerable.Empty<Surfboard>();
             var user = await _usermananger.GetUserAsync(User);
-            //IEnumerable<Rental> rentals = Enumerable.Empty<Rental>();
+            HttpClient client = _iHttpClientFactory.CreateClient("API");
             if (user != null)
             {
-                HttpClient client = _iHttpClientFactory.CreateClient("API");
-                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/Boards/{user.Id}").Result;
+                
+                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/{user.Id}").Result;
                 if (boardResponse.IsSuccessStatusCode)
                 {
                     var data = boardResponse.Content.ReadAsStringAsync().Result;
@@ -53,34 +56,14 @@ namespace Surf.Controllers
             else
             {
                 string notsigned = "NotSignedIn";
-                HttpClient client = _iHttpClientFactory.CreateClient("API");
-                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/Boards/{notsigned}").Result;
+                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/{notsigned}").Result;
                 if (boardResponse.IsSuccessStatusCode)
                 {
                     var data = boardResponse.Content.ReadAsStringAsync().Result;
                     surfboards = JsonConvert.DeserializeObject<IEnumerable<Surfboard>>(data);
                 }
             }
-            //HttpResponseMessage rentalResponse = client.GetAsync("RentalsApi/Rentals").Result;
-            //if (rentalResponse.IsSuccessStatusCode)
-            //{
-            //    var data = rentalResponse.Content.ReadAsStringAsync().Result;
-            //    rentals = JsonConvert.DeserializeObject<IEnumerable<Rental>>(data);
-            //}
-
-
-
-            // Retrieve all surfboards from _context local database
-            //And storing in the 'surfboards' variable
-
-
-            //var unavailableDate = DateTime.Today.AddDays(5)
-            //surfboards = from s in _context.Surfboard
-            //                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
-            //                       (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
-            //                        (user != null && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == user.Id)))
-            //                 select s;
-
+            
 
             // Sort
             ViewData["CurrentSort"] = sortOrder;
@@ -181,7 +164,7 @@ namespace Surf.Controllers
 
 
         // GET: User/Edit/5
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Create(int? id) // Rental
         {
             HttpClient client = _iHttpClientFactory.CreateClient("API");
