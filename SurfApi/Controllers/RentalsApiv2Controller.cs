@@ -114,20 +114,22 @@ namespace SurfApi.Controllers
         public async Task<ActionResult<Surfboard>> Post([FromBody] Rental rental)
         {
             rental.Surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == rental.SurfboardId);
-            var rentalExist = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == rental.SurfboardId);
+            
+            var rentalExist = await _context.Rental
+                .Where(s => s.SurfboardId == rental.SurfboardId)
+                .ToListAsync();
 
-
-
-            if (rental.Surfboard != null && rental.UserId != null && (rentalExist == null || rentalExist.StartDate > rental.EndDate || rentalExist.EndDate < rental.StartDate))
+            if (rental.Surfboard != null && 
+                rental.UserId != null && 
+                (rental.StartDate >= DateTime.Now.Date) &&
+                !rentalExist.Any(r => r.StartDate <= rental.EndDate && r.EndDate >= rental.StartDate))
             {
-
                 await _context.Rental.AddAsync(rental);
                 await _context.SaveChangesAsync();
-
             }
             else
             {
-                return NotFound("Surfboard not available");
+                return BadRequest("Surfboard not available");
             }
             return Ok(rental.Surfboard);
         }
