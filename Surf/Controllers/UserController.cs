@@ -61,6 +61,7 @@ namespace Surf.Controllers
             else
             {
                 string notsigned = "NotSignedIn";
+                
                 HttpResponseMessage boardResponse = client.GetAsync($"v2.0/RentalsApi/{notsigned}").Result;
                 if (boardResponse.IsSuccessStatusCode)
                 {
