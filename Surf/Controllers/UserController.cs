@@ -14,18 +14,23 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text;
 using System.Drawing.Printing;
+using System.Net.Http.Headers;
 
 namespace Surf.Controllers
 {
     public class UserController : Controller
     {
         private readonly SurfDbContext _context;
+        private readonly HttpClient _httpClient;
         private readonly UserManager<ApplicationUser> _usermananger;
         private readonly IHttpClientFactory _iHttpClientFactory;
 
-        public UserController(SurfDbContext context, UserManager <ApplicationUser> usermanager, IHttpClientFactory iHttpClientFactory)
+        public UserController(/*SurfDbContext context,*/ UserManager <ApplicationUser> usermanager, IHttpClientFactory iHttpClientFactory)
         {
-            _context = context;
+            //_context = context;
+            //_httpClient = new HttpClient();
+            //_httpClient.BaseAddress = new Uri("https://localhost:7054");
+            //_httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             _usermananger = usermanager;
             _iHttpClientFactory = iHttpClientFactory;
         }
@@ -46,7 +51,7 @@ namespace Surf.Controllers
             if (user != null)
             {
                 
-                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/{user.Id}").Result;
+                HttpResponseMessage boardResponse = client.GetAsync($"v1.0/RentalsApi/{user.Id}").Result;
                 if (boardResponse.IsSuccessStatusCode)
                 {
                     var data = boardResponse.Content.ReadAsStringAsync().Result;
@@ -56,7 +61,7 @@ namespace Surf.Controllers
             else
             {
                 string notsigned = "NotSignedIn";
-                HttpResponseMessage boardResponse = client.GetAsync($"RentalsApi/{notsigned}").Result;
+                HttpResponseMessage boardResponse = client.GetAsync($"v2.0/RentalsApi/{notsigned}").Result;
                 if (boardResponse.IsSuccessStatusCode)
                 {
                     var data = boardResponse.Content.ReadAsStringAsync().Result;

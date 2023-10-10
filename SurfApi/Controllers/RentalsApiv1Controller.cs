@@ -10,19 +10,21 @@ using SurfApi.Models;
 
 namespace SurfApi.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
-    public class RentalsApiController : ControllerBase
+    [Route("v{version:apiVersion}/RentalsApi")]
+    [ApiVersion("1.0")]
+    public class RentalsApiv1Controller : ControllerBase
     {
         private readonly SurfApiContext _context;
 
-        public RentalsApiController(SurfApiContext context)
+        public RentalsApiv1Controller(SurfApiContext context)
         {
             _context = context;
         }
 
         // GET: RentalsAPI/Boards
         [HttpGet("{userId}")]
+        [MapToApiVersion("1.0")]
         public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards(string userId)
         {
 
@@ -35,15 +37,15 @@ namespace SurfApi.Controllers
 
                 var unavailableDate = DateTime.Today.AddDays(5);
                 var surfboards = from s in _context.Surfboard
-                             where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
-                                   (_context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
-                                    (userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)))
-                             select s;
-                return Ok(await surfboards.ToListAsync()); 
+                                 where !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
+                                       _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
+                                        userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)
+                                 select s;
+                return Ok(await surfboards.ToListAsync());
             }
         }
 
-        
+
 
 
         //GET: api/API/5
@@ -109,19 +111,19 @@ namespace SurfApi.Controllers
         // POST: api/API
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Surfboard>> Post([FromBody]Rental rental)
+        public async Task<ActionResult<Surfboard>> Post([FromBody] Rental rental)
         {
             rental.Surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == rental.SurfboardId);
             var rentalExist = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == rental.SurfboardId);
-             
 
 
-            if (rental.Surfboard != null && rental.UserId != null && (rentalExist == null || (rentalExist.StartDate > rental.EndDate || rentalExist.EndDate < rental.StartDate)))
+
+            if (rental.Surfboard != null && rental.UserId != null && (rentalExist == null || rentalExist.StartDate > rental.EndDate || rentalExist.EndDate < rental.StartDate))
             {
 
                 await _context.Rental.AddAsync(rental);
                 await _context.SaveChangesAsync();
-                
+
             }
             else
             {
