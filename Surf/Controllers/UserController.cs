@@ -168,7 +168,7 @@ namespace Surf.Controllers
         public async Task<IActionResult> Create(int? id) // Rental
         {
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.GetAsync($"RentalsApi/{id}").Result;
+            HttpResponseMessage response = client.GetAsync($"RentalsApi/Board/{id}").Result;
             Surfboard surfboard = new();
             if (response.IsSuccessStatusCode)
             {

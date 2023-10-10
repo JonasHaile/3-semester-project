@@ -47,7 +47,7 @@ namespace SurfApi.Controllers
 
 
         //GET: api/API/5
-        [HttpGet("{id}")]
+        [HttpGet("Board/{id}")]
         public async Task<ActionResult<Surfboard>> GetSurfboard(int id)
         {
             var surfboard = await _context.Surfboard.FindAsync(id);
