@@ -38,7 +38,7 @@ namespace SurfApi.Controllers
                               where (s.ID == 1 || s.ID == 2) &&
                               !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
                               _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
-                              userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)
+                              userId == "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)
                               select s;
                 return Ok(await _surfboards.ToListAsync());
             }
@@ -58,55 +58,7 @@ namespace SurfApi.Controllers
             return Ok(surfboard);
         }
 
-
-        //// PUT: api/RentalsApi/5
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutRental(int id, Rental rental)
-        //{
-        //    if (id != rental.RentalId)
-        //    {
-        //        return BadRequest();
-        //    }
-
-        //    _context.Entry(rental).State = EntityState.Modified;
-
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!RentalExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-
-        //    return NoContent();
-        //}
-
-        //// POST: api/RentalsApi
-        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        //[HttpPost]
-        //public async Task<ActionResult<Rental>> PostRental(Rental rental)
-        //{
-        //  if (_context.Rental == null)
-        //  {
-        //      return Problem("Entity set 'SurfApiContext.Rental'  is null.");
-        //  }
-        //    _context.Rental.Add(rental);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetRental", new { id = rental.RentalId }, rental);
-        //}
-
         // POST: api/API
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Surfboard>> Post([FromBody] Rental rental)
         {
@@ -116,7 +68,7 @@ namespace SurfApi.Controllers
                 .Where(s => s.SurfboardId == rental.SurfboardId)
                 .ToListAsync();
 
-            if (rentalExist != null) 
+            if (rentalExist.Count == 1) 
             {
                 return BadRequest("log-in required for more than 1 active rentals");
             }
@@ -135,30 +87,5 @@ namespace SurfApi.Controllers
             }
             return Ok(rental.Surfboard);
         }
-
-        //// DELETE: api/RentalsApi/5
-        //[HttpDelete("{id}")]
-        //public async Task<IActionResult> DeleteRental(int id)
-        //{
-        //    if (_context.Rental == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    var rental = await _context.Rental.FindAsync(id);
-        //    if (rental == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.Rental.Remove(rental);
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent();
-        //}
-
-        //private bool RentalExists(int id)
-        //{
-        //    return (_context.Rental?.Any(e => e.RentalId == id)).GetValueOrDefault();
-        //}
     }
 }
