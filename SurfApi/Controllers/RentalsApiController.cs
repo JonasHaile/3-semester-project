@@ -114,7 +114,7 @@ namespace SurfApi.Controllers
             rental.Surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == rental.SurfboardId);
             var rentalExist = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == rental.SurfboardId);
              
-
+            
 
             if (rental.Surfboard != null && rental.UserId != null && (rentalExist == null || (rentalExist.StartDate > rental.EndDate || rentalExist.EndDate < rental.StartDate)))
             {
