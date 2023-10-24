@@ -64,14 +64,18 @@ namespace SurfApi.Controllers
         {
             rental.Surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == rental.SurfboardId);
             
-            var rentalExist = await _context.Rental
-                .Where(s => s.SurfboardId == rental.SurfboardId)
+            var ExistingRentals = await _context.Rental
+                .Where(r => r.UserId == rental.UserId && r.EndDate >= DateTime.Now.Date)
                 .ToListAsync();
 
-            if (rentalExist.Count == 1) 
+            if (ExistingRentals.Count > 0) 
             {
                 return BadRequest("log-in required for more than 1 active rentals");
             }
+
+            var rentalExist = await _context.Rental
+                .Where(s => s.SurfboardId == rental.SurfboardId)
+                .ToListAsync();
 
             if (rental.Surfboard != null && 
                 rental.UserId != null && 
