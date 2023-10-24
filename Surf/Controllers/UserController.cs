@@ -15,6 +15,7 @@ using System.Text.Json.Serialization;
 using System.Text;
 using System.Drawing.Printing;
 using System.Net.Http.Headers;
+using System.Net.Http.Json;
 
 namespace Surf.Controllers
 {
@@ -170,11 +171,22 @@ namespace Surf.Controllers
 
 
         // GET: User/Edit/5
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Create(int? id) // Rental
         {
+            var user = await _usermananger.GetUserAsync(User);
             HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.GetAsync($"RentalsApi/Board/{id}").Result;
+            HttpResponseMessage response;
+            if (user != null)
+            {
+                response = client.GetAsync($"v1.0/RentalsApi/Board/{id}").Result;
+            }
+            else
+            {
+                 response = client.GetAsync($"v2.0/RentalsApi/Board/{id}").Result;
+            }
+
+            //HttpResponseMessage response = client.GetAsync($"v1.0/RentalsApi/Board/{id}").Result;
             Surfboard surfboard = new();
             if (response.IsSuccessStatusCode)
             {
@@ -196,18 +208,27 @@ namespace Surf.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(DateTime startDate, Surfboard surfboard)
         {
-            var id = _usermananger.GetUserId(User);
+            var user = await _usermananger.GetUserAsync(User);
+            HttpClient client = _iHttpClientFactory.CreateClient("API");
+            HttpResponseMessage response;
             Rental rental = new Rental()
             {
                 SurfboardId = surfboard.ID,
-                UserId = id,
                 StartDate = startDate,
                 EndDate = startDate.AddDays(5),
                 Surfboard = surfboard
             };
-            HttpClient client = _iHttpClientFactory.CreateClient("API");
-            HttpResponseMessage response = client.PostAsJsonAsync($"RentalsApi", rental).Result;
-            
+
+            if (user != null)
+            {
+                rental.UserId = user.Id;
+                response = client.PostAsJsonAsync($"v1.0/RentalsApi", rental).Result;
+            }
+            else
+            {
+                rental.UserId = "NotSignedIn";
+                response = client.PostAsJsonAsync($"v2.0/RentalsApi", rental).Result;
+            }
 
             if (response.IsSuccessStatusCode)
             {
@@ -223,35 +244,5 @@ namespace Surf.Controllers
             
 
         }
-
-        //private async void RentalCheck()
-        //{
-        //    var rental =  _context.Rental.Where(r => r.StartDate < DateTime.Now).ToList();
-        //    if (rental != null || rental.Any())
-        //    {
-        //        foreach (var r in rental)
-        //        {
-        //            var surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == r.SurfboardId);
-        //            if(r.StartDate < DateTime.Now && r.EndDate > DateTime.Now)
-        //            {
-        //                surfboard.IsRented = true;  
-        //            }
-        //           else if(r.EndDate < DateTime.Now)
-        //            {
-        //                surfboard.IsRented = false;
-        //            }
-                       
-        //        }
-        //        await _context.SaveChangesAsync();
-
-        //    }
-        //}
-
-        //private bool SurfboardExists(int id)
-        //{
-        //  return _context.Surfboard.Any(e => e.ID == id);
-        //}
-
-
     }
 }

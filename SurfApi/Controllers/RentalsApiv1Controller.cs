@@ -16,12 +16,11 @@ namespace SurfApi.Controllers
     public class RentalsApiv1Controller : ControllerBase
     {
         private readonly SurfApiContext _context;
-
         public RentalsApiv1Controller(SurfApiContext context)
         {
             _context = context;
         }
-
+        
         // GET: RentalsAPI/Boards
         [HttpGet("{userId}")]
         [MapToApiVersion("1.0")]
@@ -45,9 +44,6 @@ namespace SurfApi.Controllers
             }
         }
 
-
-
-
         //GET: api/API/5
         [HttpGet("Board/{id}")]
         public async Task<ActionResult<Surfboard>> GetSurfboard(int id)
@@ -61,7 +57,6 @@ namespace SurfApi.Controllers
 
             return Ok(surfboard);
         }
-
         //// PUT: api/RentalsApi/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]
@@ -114,20 +109,22 @@ namespace SurfApi.Controllers
         public async Task<ActionResult<Surfboard>> Post([FromBody] Rental rental)
         {
             rental.Surfboard = await _context.Surfboard.FirstOrDefaultAsync(s => s.ID == rental.SurfboardId);
-            var rentalExist = await _context.Rental.FirstOrDefaultAsync(s => s.SurfboardId == rental.SurfboardId);
 
+            var rentalExist = await _context.Rental
+                .Where(s => s.SurfboardId == rental.SurfboardId)
+                .ToListAsync();
 
-
-            if (rental.Surfboard != null && rental.UserId != null && (rentalExist == null || rentalExist.StartDate > rental.EndDate || rentalExist.EndDate < rental.StartDate))
+            if (rental.Surfboard != null &&
+                rental.UserId != null &&
+                (rental.StartDate >= DateTime.Now.Date) &&
+                !rentalExist.Any(r => r.StartDate <= rental.EndDate && r.EndDate >= rental.StartDate))
             {
-
                 await _context.Rental.AddAsync(rental);
                 await _context.SaveChangesAsync();
-
             }
             else
             {
-                return NotFound("Surfboard not available");
+                return BadRequest("Surfboard not available");
             }
             return Ok(rental.Surfboard);
         }

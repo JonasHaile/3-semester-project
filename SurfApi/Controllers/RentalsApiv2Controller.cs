@@ -16,6 +16,7 @@ namespace SurfApi.Controllers
     public class RentalsApiController : ControllerBase
     {
         private readonly SurfApiContext _context;
+        private IQueryable<Surfboard> _surfboards;
 
         public RentalsApiController(SurfApiContext context)
         {
@@ -35,32 +36,30 @@ namespace SurfApi.Controllers
             {
 
                 var unavailableDate = DateTime.Today.AddDays(5);
-                var surfboards = from s in _context.Surfboard
+                _surfboards = from s in _context.Surfboard
                                  where (s.ID == 1 || s.ID == 2) &&
                               !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
                                    _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
                                     userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)
                                  select s;
-                return Ok(await surfboards.ToListAsync());
+                return Ok(await _surfboards.ToListAsync());
             }
         }
-
-
-
 
         //GET: api/API/5
         [HttpGet("Board/{id}")]
         public async Task<ActionResult<Surfboard>> GetSurfboard(int id)
         {
-            var surfboard = await _context.Surfboard.FindAsync(id);
-
-            if (surfboard == null)
+            if (id < 1 || id > 2)
             {
                 return NotFound();
             }
 
+            var surfboard = await _context.Surfboard.FirstOrDefaultAsync(r => r.ID == id);
+
             return Ok(surfboard);
         }
+
 
         //// PUT: api/RentalsApi/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

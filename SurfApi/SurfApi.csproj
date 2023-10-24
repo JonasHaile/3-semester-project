@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Version1\**" />
+    <Compile Remove="Controllers\Version2\**" />
+    <Content Remove="Controllers\Version1\**" />
+    <Content Remove="Controllers\Version2\**" />
+    <EmbeddedResource Remove="Controllers\Version1\**" />
+    <EmbeddedResource Remove="Controllers\Version2\**" />
+    <None Remove="Controllers\Version1\**" />
+    <None Remove="Controllers\Version2\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
@@ -28,8 +39,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Version1\" />
-    <Folder Include="Controllers\Version2\" />
     <Folder Include="Migrations\" />
   </ItemGroup>
 
