@@ -238,7 +238,16 @@ namespace Surf.Controllers
             }
             else
             {
-                ModelState.AddModelError(string.Empty, "Unable to rent surfboard");
+                var errorResponse = response.Content.ReadAsStringAsync().Result.Trim('"');
+
+                if (errorResponse == "log-in required for more than 1 active rentals")
+                {
+                    ModelState.AddModelError(string.Empty, "Log-in required for more than 1 active rentals");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Unable to rent surfboard");
+                }
             }
             return View(surfboard);
             

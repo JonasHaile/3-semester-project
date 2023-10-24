@@ -27,21 +27,19 @@ namespace SurfApi.Controllers
         [HttpGet("{userId}")]
         public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards(string userId)
         {
-
             if (!_context.Surfboard.Any())
             {
                 return NoContent();
             }
             else
             {
-
                 var unavailableDate = DateTime.Today.AddDays(5);
                 _surfboards = from s in _context.Surfboard
-                                 where (s.ID == 1 || s.ID == 2) &&
+                              where (s.ID == 1 || s.ID == 2) &&
                               !_context.Rental.Any(r => r.SurfboardId == s.ID) ||
-                                   _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
-                                    userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)
-                                 select s;
+                              _context.Rental.Any(r => r.SurfboardId == s.ID && (DateTime.Today > r.EndDate || unavailableDate < r.StartDate)) ||
+                              userId != "NotSignedIn" && _context.Rental.Any(r => r.SurfboardId == s.ID && r.UserId == userId)
+                              select s;
                 return Ok(await _surfboards.ToListAsync());
             }
         }
@@ -117,6 +115,11 @@ namespace SurfApi.Controllers
             var rentalExist = await _context.Rental
                 .Where(s => s.SurfboardId == rental.SurfboardId)
                 .ToListAsync();
+
+            if (rentalExist != null) 
+            {
+                return BadRequest("log-in required for more than 1 active rentals");
+            }
 
             if (rental.Surfboard != null && 
                 rental.UserId != null && 
