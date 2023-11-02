@@ -1,0 +1,38 @@
+﻿@using MyBlazorShop.Libraries.Services.Product
+@using MyBlazorShop.Libraries.Services.Product.Models
+@page "/"
+@inject IProductService productservice
+<PageTitle>Product listings</PageTitle>
+<HeadContent>
+    <meta name="description" content="Product listing page" />
+</HeadContent>
+<Hero Title="Shop" Description="Kan du li surfboards???????? køb dem her, de er super fede" Image="Surfboards.jpg" BackgroundImage="shop-hero-yellow"></Hero>
+
+@if (Products?.Any() ?? false)
+{
+    <main class="margin-horizontal:auto max-width:container padding-horizontal:32">
+        <div id="vue-shop" class="margin-bottom:32 quenched">
+            <div class="display:flex flex-grow:1 flex-wrap:wrap margin-bottom:-32 margin-horizontal:-16">
+                <div class="display:flex flex-direction:column flex-grow:0 flex-shrink:0 margin-bottom:32 padding-horizontal:16 width:100 @@mq-768--width:100">
+                    <ul class="display:flex flex-grow:1 flex-wrap:wrap margin-bottom:-32 margin-horizontal:-16">
+                        @foreach(var product in Products)
+                        {
+                            <ProductListingItem Product="product"></ProductListingItem>
+                        }                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+}
+
+@code {
+    public IList<ProductModel> Products { get; set; }
+}
+@functions{
+    protected override void OnInitialized()
+    {
+        Products = productservice.GetAll();
+        base.OnInitialized();
+    }
+}
