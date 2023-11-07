@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Surf", "Surf.csproj", "{F4326DA3-02F6-4E33-A474-0EC667AB8109}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Surf", "Surf.csproj", "{47550086-C246-40B4-BE20-FE189711FAA0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SurfApi", "..\SurfApi\SurfApi.csproj", "{485F896D-15F2-4DA3-9F0F-E05BB0B74A1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SurfApi", "..\SurfApi\SurfApi.csproj", "{C4937872-A64A-4D2E-9F77-46B57C754949}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBlazorShop.Libraries.Services", "..\blazor-webassembly-building-your-first-app-3086416-03_08\Libraries\MyBlazorShop.Libraries.Services\MyBlazorShop.Libraries.Services.csproj", "{A76F23A7-968C-40B2-856C-A8F57D169057}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyBlazorShop.Web.BlazorWasm", "..\blazor-webassembly-building-your-first-app-3086416-03_08\Web\MyBlazorShop.Web.BlazorWasm\MyBlazorShop.Web.BlazorWasm.csproj", "{0EF21024-32E0-450D-A5BF-C8583C75BF0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F4326DA3-02F6-4E33-A474-0EC667AB8109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F4326DA3-02F6-4E33-A474-0EC667AB8109}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F4326DA3-02F6-4E33-A474-0EC667AB8109}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F4326DA3-02F6-4E33-A474-0EC667AB8109}.Release|Any CPU.Build.0 = Release|Any CPU
-		{485F896D-15F2-4DA3-9F0F-E05BB0B74A1D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{485F896D-15F2-4DA3-9F0F-E05BB0B74A1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{485F896D-15F2-4DA3-9F0F-E05BB0B74A1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{485F896D-15F2-4DA3-9F0F-E05BB0B74A1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47550086-C246-40B4-BE20-FE189711FAA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47550086-C246-40B4-BE20-FE189711FAA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47550086-C246-40B4-BE20-FE189711FAA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47550086-C246-40B4-BE20-FE189711FAA0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4937872-A64A-4D2E-9F77-46B57C754949}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4937872-A64A-4D2E-9F77-46B57C754949}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4937872-A64A-4D2E-9F77-46B57C754949}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4937872-A64A-4D2E-9F77-46B57C754949}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A76F23A7-968C-40B2-856C-A8F57D169057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A76F23A7-968C-40B2-856C-A8F57D169057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A76F23A7-968C-40B2-856C-A8F57D169057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A76F23A7-968C-40B2-856C-A8F57D169057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EF21024-32E0-450D-A5BF-C8583C75BF0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EF21024-32E0-450D-A5BF-C8583C75BF0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EF21024-32E0-450D-A5BF-C8583C75BF0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EF21024-32E0-450D-A5BF-C8583C75BF0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

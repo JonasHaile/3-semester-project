@@ -1,21 +1,27 @@
 ﻿@using MyBlazorShop.Libraries.Services.Product
 @using MyBlazorShop.Libraries.Services.Product.Models
+@using System.Text.Json.Serialization
+@using MyBlazorShop.Web.BlazorWasm.Services;
+
 @page "/"
 @inject IProductService productservice
+@inject HttpClient httpClient
+@inject ApiService apiService
+
 <PageTitle>Product listings</PageTitle>
 <HeadContent>
     <meta name="description" content="Product listing page" />
 </HeadContent>
 <Hero Title="Shop" Description="Kan du li surfboards???????? køb dem her, de er super fede" Image="Surfboards.jpg" BackgroundImage="shop-hero-yellow"></Hero>
 
-@if (Products?.Any() ?? false)
+@if (products?.Any() ?? false)
 {
     <main class="margin-horizontal:auto max-width:container padding-horizontal:32">
         <div id="vue-shop" class="margin-bottom:32 quenched">
             <div class="display:flex flex-grow:1 flex-wrap:wrap margin-bottom:-32 margin-horizontal:-16">
                 <div class="display:flex flex-direction:column flex-grow:0 flex-shrink:0 margin-bottom:32 padding-horizontal:16 width:100 @@mq-768--width:100">
                     <ul class="display:flex flex-grow:1 flex-wrap:wrap margin-bottom:-32 margin-horizontal:-16">
-                        @foreach(var product in Products)
+                        @foreach(var product in products)
                         {
                             <ProductListingItem Product="product"></ProductListingItem>
                         }                        
@@ -27,12 +33,29 @@
 }
 
 @code {
-    public IList<ProductModel> Products { get; set; }
+    public IList<ProductModel> products { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        {
+            products = await apiService.GetProducts();
+
+        }
 }
 @functions{
-    protected override void OnInitialized()
-    {
-        Products = productservice.GetAll();
-        base.OnInitialized();
+    
+     
+        // //Products = httpClient.GetFromJsonAsync<IList<ProductModel>>();
+
+        // HttpResponseMessage boardResponse = httpClient.GetAsync("NotSignedIn").Result;
+       
+        // if (boardResponse.IsSuccessStatusCode)
+        // {
+        //     var data = boardResponse.Content.ReadAsStringAsync().Result;
+        //     Products = JsonConvert.DeserializeObject<IEnumerable<ProductModel>>(data);
+        // }
+        // base.OnInitialized();
     }
 }
+
+

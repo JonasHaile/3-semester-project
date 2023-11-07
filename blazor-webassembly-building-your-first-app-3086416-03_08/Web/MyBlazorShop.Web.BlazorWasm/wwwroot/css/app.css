@@ -1,4 +1,4 @@
-﻿#blazor-error-ui {
+﻿/*#blazor-error-ui {
     display: none;
     padding: 15px;
     bottom: 0;
@@ -36,4 +36,4 @@ header {
 .nav-link.active {
     text-decoration:underline;
     color: #ff583d;
-}
+}*/
