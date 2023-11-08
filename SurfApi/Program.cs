@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using MyBlazorShop.Libraries.Services.Product;
-using MyBlazorShop.Libraries.Services.ShoppingCart;
-using MyBlazorShop.Libraries.Services.Storage;
+
 using SurfApi.Data;
 namespace SurfApi
 {

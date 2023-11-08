@@ -31,8 +31,4 @@
     <Folder Include="wwwroot\Images\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\blazor-webassembly-building-your-first-app-3086416-03_08\Libraries\MyBlazorShop.Libraries.Services\MyBlazorShop.Libraries.Services.csproj" />
-  </ItemGroup>
-
 </Project>
