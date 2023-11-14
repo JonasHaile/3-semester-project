@@ -37,3 +37,23 @@ header {
     text-decoration:underline;
     color: #ff583d;
 }
+
+.page-container {
+    height: 10vh; /* Set the container height to 100% of the viewport height */
+    display: flex;
+    align-items: center; /* Center the content vertically */
+    justify-content: center; /* Center the content horizontally */
+}
+
+.pages {
+    display: flex; /* Use flexbox to make the list items flex containers */
+    list-style: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+    align-content: center;
+}
+
+    .pages li {
+        margin-right: 10px; /* Adjust margin as needed to create space between numbers */
+        font-size: 30px
+        
+    }

@@ -51,6 +51,17 @@ namespace MyBlazorShop.Libraries.Services.Product
         {
             return _storageService.Products.ToList();
         }
+        public IList<ProductModel> GetAll(int size, int page = 1)
+        {
+            var productsList = _storageService.Products.ToList();
+            return productsList.Skip((page - 1) * size).Take(size).ToList();
+        }
+
+        public int GetTotalPageCount(int size)
+        {
+            return (_storageService.Products.Count + size - 1) / size;
+        }
+
     }
-    
+
 }

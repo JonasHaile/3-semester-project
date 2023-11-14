@@ -2,6 +2,8 @@
 @using MyBlazorShop.Libraries.Services.Product.Models
 @page "/"
 @inject IProductService productservice
+@inject IConfiguration configuration
+@inject NavigationManager navigationManager
 <PageTitle>Product listings</PageTitle>
 <HeadContent>
     <meta name="description" content="Product listing page" />
@@ -15,11 +17,23 @@
             <div class="display:flex flex-grow:1 flex-wrap:wrap margin-bottom:-32 margin-horizontal:-16">
                 <div class="display:flex flex-direction:column flex-grow:0 flex-shrink:0 margin-bottom:32 padding-horizontal:16 width:100 @@mq-768--width:100">
                     <ul class="display:flex flex-grow:1 flex-wrap:wrap margin-bottom:-32 margin-horizontal:-16">
-                        @foreach(var product in Products)
+                        @foreach (var product in Products)
                         {
                             <ProductListingItem Product="product"></ProductListingItem>
-                        }                        
+                        }
                     </ul>
+                    @if (TotalPageCount > 1)
+                    {
+                     <div class="page-container">
+                        <ul class="pages">
+                            @for (var page = 1; page <= TotalPageCount; page++)
+                            {
+                                <li><a href="@navigationManager.GetUriWithQueryParameter("page", page)">@(page)</a></li>
+                            }
+                        </ul>
+                     </div>
+                    }
+                   
                 </div>
             </div>
         </div>
@@ -27,12 +41,23 @@
 }
 
 @code {
-    public IList<ProductModel> Products { get; set; }
+    private IList<ProductModel> Products { get; set; }
+
+    [Parameter, SupplyParameterFromQuery]
+    public int? Page { get; set; }
+
+    private int TotalPageCount { get; set; }
 }
-@functions{
-    protected override void OnInitialized()
+@functions {
+    protected override void OnParametersSet()
     {
-        Products = productservice.GetAll();
-        base.OnInitialized();
+        //var productListingConfig = configuration.GetSection("ProductListing");
+        //var pageSize = configuration.GetValue<int>("PageSize");
+
+
+        Products = productservice.GetAll(4, Page ?? 1);
+        TotalPageCount = productservice.GetTotalPageCount(4);
+
+        base.OnParametersSet();
     }
 }
