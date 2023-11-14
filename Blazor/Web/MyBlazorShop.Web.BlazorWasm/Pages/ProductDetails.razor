@@ -1,6 +1,7 @@
 ﻿@using MyBlazorShop.Libraries.Services.Product
 @using MyBlazorShop.Libraries.Services.Product.Models
 @using MyBlazorShop.Libraries.Services.ShoppingCart
+@using MyBlazorShop.Libraries.Services.ShoppingCart.Models
 @using MyBlazorShop.Web.BlazorWasm.Shared.Layout
 @page "/product/{slug}"
 @inject IProductService productService
@@ -91,6 +92,8 @@
         }
 
     }
+    [CascadingParameter(Name = "ShoppingCartCountModel")]
+    private ShoppingCartCountModel? ShoppingCartCountModel { get; set; }
 }
 @functions {
     protected override void OnInitialized()
@@ -114,6 +117,11 @@
         {
             shoppingCartService.AddProduct(Product, Quantity ?? 1);
             Quantity = null;
+
+            if (ShoppingCartCountModel != null)
+            {
+                ShoppingCartCountModel.OnCountChange();
+            }
         }
     }
 }
