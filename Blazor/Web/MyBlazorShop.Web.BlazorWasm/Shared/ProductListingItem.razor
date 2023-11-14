@@ -1,5 +1,6 @@
 ﻿@using MyBlazorShop.Libraries.Services.Product.Models;
 @using MyBlazorShop.Libraries.Services.ShoppingCart;
+@using MyBlazorShop.Libraries.Services.ShoppingCart.Models;
 @inject IShoppingCartService shoppingCartService
 @implements IProductAddToCart
 @if (Product != null)
@@ -57,6 +58,8 @@
         }
 
     }
+    [CascadingParameter(Name = "ShoppingCartCountModel")]
+    private ShoppingCartCountModel? ShoppingCartCountModel { get; set; }
 }
 @functions {
     public void AddToCart()
@@ -65,6 +68,11 @@
         {
             shoppingCartService.AddProduct(Product, Quantity ?? 1);
             Quantity = null;
+
+            if (ShoppingCartCountModel != null)
+            {
+                ShoppingCartCountModel.OnCountChange();
+            }
         }
     }
 }
