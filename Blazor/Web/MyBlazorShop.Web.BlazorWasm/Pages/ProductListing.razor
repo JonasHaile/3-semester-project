@@ -22,18 +22,10 @@
                             <ProductListingItem Product="product"></ProductListingItem>
                         }
                     </ul>
-                    @if (TotalPageCount > 1)
-                    {
-                     <div class="page-container">
-                        <ul class="pages">
-                            @for (var page = 1; page <= TotalPageCount; page++)
-                            {
-                                <li><a href="@navigationManager.GetUriWithQueryParameter("page", page)">@(page)</a></li>
-                            }
-                        </ul>
-                     </div>
-                    }
-                   
+                    <Pagination ActivePageNumber="@currentPageNumber" 
+                            Alignment="Alignment.Center"
+                            TotalPages="TotalPageCount"
+                            PageChanged="OnPageChangedAsync" />
                 </div>
             </div>
         </div>
@@ -42,22 +34,36 @@
 
 @code {
     private IList<ProductModel> Products { get; set; }
-
+    
     [Parameter, SupplyParameterFromQuery]
-    public int? Page { get; set; }
+    public int? page { get; set; }
 
     private int TotalPageCount { get; set; }
+
+
+    int currentPageNumber = 1;
+
+    
 }
 @functions {
-    protected override void OnParametersSet()
+    protected override void OnInitialized()
     {
         //var productListingConfig = configuration.GetSection("ProductListing");
         //var pageSize = configuration.GetValue<int>("PageSize");
 
 
-        Products = productservice.GetAll(4, Page ?? 1);
+        Products = productservice.GetAll(4, currentPageNumber);
         TotalPageCount = productservice.GetTotalPageCount(4);
 
         base.OnParametersSet();
     }
+
+    private async Task OnPageChangedAsync(int newPageNumber)
+    {
+        Products = productservice.GetAll(4, newPageNumber);
+        await Task.Run(() => { currentPageNumber = newPageNumber; });
+    }
+    
+
+
 }
