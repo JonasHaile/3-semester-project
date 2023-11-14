@@ -14,4 +14,6 @@ builder.Services.AddSingleton<IStorageService, StorageService>();
 builder.Services.AddSingleton<IShoppingCartService, ShoppingCartService>();
 builder.Services.AddTransient<IProductService, ProductService>();
 
+builder.Services.AddBlazorBootstrap(); // Add this line
+
 await builder.Build().RunAsync();
