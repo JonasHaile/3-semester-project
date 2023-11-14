@@ -51,12 +51,21 @@
                        </div>
                         @if (AllProducts != null)
                         {
-                            <ul>
-                                @foreach (var product in AllProducts)
-                                {
-                                    <li><a href="@product.FullUrl">@product.Name</a></li>
-                                }
-                            </ul>
+                            <Modal @ref="modal" Title="Surfboards">
+                                <BodyTemplate>
+                                    <ul>
+                                        @foreach (var product in AllProducts)
+                                        {
+                                            <li><a href="@product.FullUrl">@product.Name</a></li>
+                                        }
+                                    </ul>
+                                </BodyTemplate>
+                                <FooterTemplate>
+                                    <Button Color="ButtonColor.Primary" @onclick="OnHideModalClick">Close</Button>
+                                </FooterTemplate>
+                            </Modal>
+
+                            <Button Color="ButtonColor.Primary" @onclick="OnShowModalClick">Show Other Surfboards</Button>    
                         }
                    </div>               
                }
@@ -74,6 +83,8 @@
 
     public IList<ProductModel>? AllProducts { get; set; }  
 
+
+    //ConfirmDialog
     private ConfirmDialog dialog = default!;
 
     private async Task ShowConfirmationAsync()
@@ -92,8 +103,24 @@
         }
 
     }
+    
+    //Item Cart Count
     [CascadingParameter(Name = "ShoppingCartCountModel")]
     private ShoppingCartCountModel? ShoppingCartCountModel { get; set; }
+
+
+    //Modal
+    private Modal modal = default!;
+
+    private async Task OnShowModalClick()
+    {
+        await modal.ShowAsync();
+    }
+
+    private async Task OnHideModalClick()
+    {
+        await modal.HideAsync();
+    }
 }
 @functions {
     protected override void OnInitialized()
