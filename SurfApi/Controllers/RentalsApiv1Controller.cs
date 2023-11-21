@@ -42,6 +42,24 @@ namespace SurfApi.Controllers
                                  select s;
                 return Ok(await surfboards.ToListAsync());
             }
+        }  // GET: RentalsAPI/Boards
+        [HttpGet]
+        [MapToApiVersion("1.0")]
+        public async Task<ActionResult<IEnumerable<Surfboard>>> GetAllBoards()
+        {
+
+            if (!_context.Surfboard.Any())
+            {
+                return NoContent();
+            }
+            else
+            {
+
+                var unavailableDate = DateTime.Today.AddDays(5);
+                var surfboards = from s in _context.Surfboard
+                                 select s;
+                return Ok(await surfboards.ToListAsync());
+            }
         }
 
         //GET: api/API/5

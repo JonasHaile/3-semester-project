@@ -4,6 +4,7 @@
 @inject IProductService productservice
 @inject IConfiguration configuration
 @inject NavigationManager navigationManager
+@inject HttpClient httpClient
 <PageTitle>Product listings</PageTitle>
 <HeadContent>
     <meta name="description" content="Product listing page" />
@@ -22,10 +23,10 @@
                             <ProductListingItem Product="product"></ProductListingItem>
                         }
                     </ul>
-                    <Pagination ActivePageNumber="@currentPageNumber" 
+                    @* <Pagination ActivePageNumber="@currentPageNumber" 
                             Alignment="Alignment.Center"
                             TotalPages="TotalPageCount"
-                            PageChanged="OnPageChangedAsync" />
+                            PageChanged="OnPageChangedAsync" /> *@
                 </div>
             </div>
         </div>
@@ -33,7 +34,7 @@
 }
 
 @code {
-    private IList<ProductModel> Products { get; set; }
+    private IList<ProductModel>? Products { get; set; } 
     
     [Parameter, SupplyParameterFromQuery]
     public int? page { get; set; }
@@ -46,23 +47,49 @@
     
 }
 @functions {
-    protected override void OnInitialized()
+
+    protected override async Task OnInitializedAsync()
     {
-        //var productListingConfig = configuration.GetSection("ProductListing");
-        //var pageSize = configuration.GetValue<int>("PageSize");
+        try
+        {
+            Console.WriteLine("Attempting to fetch products...");
 
+            var response = await httpClient.GetFromJsonAsync<IList<ProductModel>>("v1.0/RentalsApi");
 
-        Products = productservice.GetAll(4, currentPageNumber);
-        TotalPageCount = productservice.GetTotalPageCount(4);
+            if (response != null)
+            {
+                Products = response;
+                Console.WriteLine($"Successfully fetched {Products.Count} products.");
+            }
+            else
+            {
+                Console.WriteLine("Response is null.");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
 
         base.OnParametersSet();
     }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     //var productListingConfig = configuration.GetSection("ProductListing");
+    //     //var pageSize = configuration.GetValue<int>("PageSize");
 
-    private async Task OnPageChangedAsync(int newPageNumber)
-    {
-        Products = productservice.GetAll(4, newPageNumber);
-        await Task.Run(() => { currentPageNumber = newPageNumber; });
-    }
+    //     Products = await httpClient.GetFromJsonAsync<IList<ProductModel>>("v1.0/RentalsApi");
+    //     // Products = productservice.GetAll(4, currentPageNumber);
+    //     // TotalPageCount = productservice.GetTotalPageCount(4);
+
+    //     base.OnParametersSet();
+    // }
+
+    // private async Task OnPageChangedAsync(int newPageNumber)
+    // {
+    //     Products = productservice.GetAll(4, newPageNumber);
+    //     await Task.Run(() => { currentPageNumber = newPageNumber; });
+    // }
     
 
 

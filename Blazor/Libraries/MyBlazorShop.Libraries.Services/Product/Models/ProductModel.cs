@@ -1,4 +1,6 @@
-﻿namespace MyBlazorShop.Libraries.Services.Product.Models
+﻿using System.Security.AccessControl;
+
+namespace MyBlazorShop.Libraries.Services.Product.Models
 {
     /// <summary>
     /// Stores a product.
@@ -8,36 +10,25 @@
         /// <summary>
         /// Unique identifier of the product.
         /// </summary>
-        public string Sku { get; }
 
-        /// <summary>
-        /// Name of the product.
-        /// </summary>
-        public string Name { get; }
+        private string sku = "hej";
+            public string Sku { get { return sku; }}
+        
 
-        public double Length { get; }
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public double Length { get; set; }
+        public double Width { get; set; }
+        public double Thickness { get; set; }
+        public double Volume { get; set; }
+        public decimal Price { get; set; }
+        public string Type { get; set; }
+        public string? Equipment { get; set; }
+        public string Image { get; set; }
+        public byte[] RowVersion { get; set; }
+        public bool IsRented { get; set; }
 
-        public double Width { get; }
 
-        public double Thickness { get; }
-
-        public double Volume { get; }
-
-        public string Type { get; }
-
-        public string Equipment { get; }
-
-        /// <summary>
-        /// Price of the product.
-        /// </summary>
-        public decimal Price { get; }
-
-        /// <summary>
-        /// The image path of the product.
-        /// </summary>
-        public string Image { get; }
-
-       
 
         /// <summary>
         /// The route slug of the product.
@@ -68,11 +59,11 @@
         /// <param name="name">Name of the product.</param>
         /// <param name="price">Price of the product.</param>
         /// <param name="image">Image path of the product.</param>
-        public ProductModel(string sku, string name, double lengt, double width, double thickness, double volume, string type, string equipment, decimal price, string image)
+        public ProductModel(string name, double length, double width, double thickness, double volume, string type, string equipment, decimal price, string image)
         {
-            Sku = sku;
+            
             Name = name;
-            Length = lengt;
+            Length = length;
             Width = width;
             Thickness = thickness;
             Volume = volume;

@@ -39,6 +39,20 @@ namespace SurfApi
                 options.SubstituteApiVersionInUrl = true;
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowBlazorOrigin",
+                    builder =>
+                    {
+                        builder.WithOrigins("https://localhost:9002")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .SetIsOriginAllowed(origin => true)
+                        .AllowCredentials();
+                      
+
+                    });
+            });
             var app = builder.Build();
 
 
@@ -60,6 +74,9 @@ namespace SurfApi
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseHttpsRedirection();
+            app.UseRouting();
+
+            app.UseCors("AllowBlazorOrigin");
 
             app.UseAuthorization();
 
