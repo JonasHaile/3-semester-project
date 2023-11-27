@@ -6,4 +6,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Blazor\Libraries\MyBlazorShop.Libraries.Services\MyBlazorShop.Libraries.Services.csproj" />
+    <ProjectReference Include="..\Blazor\Web\MyBlazorShop.Web.BlazorWasm\MyBlazorShop.Web.BlazorWasm.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -10,11 +10,9 @@
     <PackageReference Include="Blazor.Bootstrap" Version="1.10.3" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.7" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.7" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MyBlazorShop.Libraries.Shared\MyBlazorShop.Libraries.Shared.csproj" />
     <ProjectReference Include="..\..\Libraries\MyBlazorShop.Libraries.Services\MyBlazorShop.Libraries.Services.csproj" />
   </ItemGroup>
 
