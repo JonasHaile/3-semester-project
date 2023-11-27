@@ -18,7 +18,7 @@
             }
         </ul>
     }
-    <EditForm Model="@this" OnValidSubmit="@SendMessage">
+    <EditForm Model="@this">
         <InputText @bind-Value="Message" />
         <button class="button lg solid gold" type="submit">Send message</button>
     </EditForm>
@@ -36,7 +36,7 @@
         Messages = new List<LiveChatMessage>();
 
         hubConnection = new HubConnectionBuilder()
-            .WithUrl(navigationManager.ToAbsoluteUri("/live-chat"))
+            .WithUrl(navigationManager.ToAbsoluteUri("https://localhost:9002/live-chat"))
             .Build();
 
         hubConnection.On<string>("ReceiveMessage", (message) =>
@@ -50,15 +50,15 @@
         await base.OnInitializedAsync();
     }
 
-    private async Task SendMessage()
-    {
-        if (!string.IsNullOrWhiteSpace(Message))
-        {
-            Messages.Add(new LiveChatMessage(Message, LiveChatTypeEnum.SENT));
-            await hubConnection.SendAsync("SendMessage", Message);
-            Message = string.Empty;
-        }
-    }
+    // private async Task SendMessage()
+    // {
+    //     if (!string.IsNullOrWhiteSpace(Message))
+    //     {
+    //         Messages.Add(new LiveChatMessage(Message, LiveChatTypeEnum.SENT));
+    //         await hubConnection.SendAsync("SendMessage", Message);
+    //         Message = string.Empty;
+    //     }
+    // }
 
     public async ValueTask DisposeAsync()
     {
