@@ -11,8 +11,7 @@ namespace MyBlazorShop.Libraries.Services.Product.Models
         /// Unique identifier of the product.
         /// </summary>
 
-        private string sku = "hej";
-            public string Sku { get { return sku; }}
+        public string Sku {get ;set;}
         
 
         public int ID { get; set; }

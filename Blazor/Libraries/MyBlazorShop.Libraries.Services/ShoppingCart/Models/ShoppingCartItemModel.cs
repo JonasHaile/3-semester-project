@@ -22,6 +22,8 @@ namespace MyBlazorShop.Libraries.Services.ShoppingCart.Models
         /// </summary>
         public int Quantity { get; protected set; }
 
+
+        
         /// <summary>
         /// Get the total price of the product.
         /// </summary>
@@ -43,6 +45,7 @@ namespace MyBlazorShop.Libraries.Services.ShoppingCart.Models
             Product = product;
             Price = product.Price;
             Quantity = quantity;
+            
         }
 
         /// <summary>

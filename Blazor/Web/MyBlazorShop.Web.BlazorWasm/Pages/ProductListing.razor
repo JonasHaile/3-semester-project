@@ -1,8 +1,10 @@
 ﻿@using MyBlazorShop.Libraries.Services.Product
 @using MyBlazorShop.Libraries.Services.Product.Models
+@using MyBlazorShop.Libraries.Services.Storage
 @page "/"
 @inject IProductService productservice
 @inject IConfiguration configuration
+@inject IStorageService storageservice
 @inject NavigationManager navigationManager
 @inject HttpClient httpClient
 <PageTitle>Product listings</PageTitle>
@@ -23,10 +25,10 @@
                             <ProductListingItem Product="product"></ProductListingItem>
                         }
                     </ul>
-                    @* <Pagination ActivePageNumber="@currentPageNumber" 
+                     <Pagination ActivePageNumber="@currentPageNumber" 
                             Alignment="Alignment.Center"
                             TotalPages="TotalPageCount"
-                            PageChanged="OnPageChangedAsync" /> *@
+                            PageChanged="OnPageChangedAsync" /> 
                 </div>
             </div>
         </div>
@@ -54,11 +56,20 @@
         {
             Console.WriteLine("Attempting to fetch products...");
 
+
+
             var response = await httpClient.GetFromJsonAsync<IList<ProductModel>>("v1.0/RentalsApi");
+
+            foreach(ProductModel p in response)
+            {
+                p.Sku = p.ID.ToString();
+                storageservice.AddProduct(p);
+            }
 
             if (response != null)
             {
-                Products = response;
+                Products = productservice.GetAll(4, currentPageNumber);
+                TotalPageCount = productservice.GetTotalPageCount(4);
                 Console.WriteLine($"Successfully fetched {Products.Count} products.");
             }
             else
@@ -85,11 +96,11 @@
     //     base.OnParametersSet();
     // }
 
-    // private async Task OnPageChangedAsync(int newPageNumber)
-    // {
-    //     Products = productservice.GetAll(4, newPageNumber);
-    //     await Task.Run(() => { currentPageNumber = newPageNumber; });
-    // }
+     private async Task OnPageChangedAsync(int newPageNumber)
+     {
+         Products = productservice.GetAll(4, newPageNumber);
+         await Task.Run(() => { currentPageNumber = newPageNumber; });
+     }
     
 
 

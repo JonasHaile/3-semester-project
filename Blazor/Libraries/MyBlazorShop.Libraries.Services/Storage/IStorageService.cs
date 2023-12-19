@@ -18,5 +18,7 @@ namespace MyBlazorShop.Libraries.Services.Storage
         /// </summary>
         ShoppingCartModel ShoppingCart { get; }
 
+        void AddProduct(ProductModel product);
+
     }
 }

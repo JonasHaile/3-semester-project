@@ -44,7 +44,7 @@ namespace MyBlazorShop.Libraries.Services.Storage
         /// Adds a product to the storage.
         /// </summary>
         /// <param name="productModel">The <see cref="ProductModel"/> type to be added.</param>
-        private void AddProduct(ProductModel productModel)
+        public void AddProduct(ProductModel productModel)
         {
             if (!Products.Any(p => p.Sku == productModel.Sku))
             {
