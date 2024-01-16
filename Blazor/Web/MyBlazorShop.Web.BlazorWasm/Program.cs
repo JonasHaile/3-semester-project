@@ -19,6 +19,7 @@ http.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue
     NoCache = true
 };
 
+// I .NET 6 har Blazor WASM ikke noget koncept om DI scopes. Derfor opfører de sig som singleton uanset
 builder.Services.AddScoped(sp => http);
 builder.Services.AddSingleton<IStorageService, StorageService>();
 builder.Services.AddSingleton<IShoppingCartService, ShoppingCartService>();

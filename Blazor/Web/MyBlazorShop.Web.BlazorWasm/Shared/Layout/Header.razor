@@ -42,6 +42,8 @@
     {
         if (ShoppingCartCountModel != null)
         {
+            // += opdaterer en variable ved at inkrementererog tildeler værdien. () repræsenterer parametrene 
+            // ShoppingCartCountModel.CountChange ændres hvis værdien er større end ShoppingCartCountModel.Count = shoppingCartService.Count();
             ShoppingCartCountModel.CountChange += () =>
             {
                 ShoppingCartCountModel.Count = shoppingCartService.Count();
